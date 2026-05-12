@@ -143,6 +143,43 @@
             transition:0.3s;
         }
 
+        /* CATEGORY SECTION */
+        .category-wrapper {
+            padding: 10px 0 10px 15px;
+            background: var(--white);
+            margin-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .category-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            white-space: nowrap;
+            padding-right: 15px;
+        }
+
+        .category-scroll::-webkit-scrollbar { display: none; }
+
+        .cat-btn {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-family: 'Hind Siliguri';
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .cat-btn.active {
+            background: var(--primary-blue);
+            color: #fff;
+            border-color: var(--primary-blue);
+        }
+
         /* BOOK GRID */
         .book-grid{
             display:grid;
@@ -224,7 +261,6 @@
         .nav-btn.active{ color:var(--primary-blue); }
         .nav-btn i{ font-size:20px; display:block; margin-bottom:4px; }
 
-        /* Cart Badge */
         #cartBadge {
             position: absolute;
             top: -5px;
@@ -316,13 +352,27 @@
     <div class="dots" id="sliderDots"></div>
 </div>
 
+<div class="category-wrapper">
+    <div class="category-scroll">
+        <button class="cat-btn active" onclick="filterByCategory('all', this)">সব বই</button>
+        <button class="cat-btn" onclick="filterByCategory('বিজ্ঞান', this)">বিজ্ঞান</button>
+        <button class="cat-btn" onclick="filterByCategory('ব্যবসা', this)">ব্যবসা</button>
+        <button class="cat-btn" onclick="filterByCategory('ইতিহাস', this)">ইতিহাস</button>
+        <button class="cat-btn" onclick="filterByCategory('কুইজ', this)">কুইজ</button>
+        <button class="cat-btn" onclick="filterByCategory('গল্প', this)">গল্প</button>
+        <button class="cat-btn" onclick="filterByCategory('এডমিশন', this)">এডমিশন বই</button>
+        <button class="cat-btn" onclick="filterByCategory('মেডিকেল', this)">মেডিকেল ভর্তি</button>
+        <button class="cat-btn" onclick="filterByCategory('ইঞ্জিনিয়ারিং', this)">ইঞ্জিনিয়ারিং</button>
+    </div>
+</div>
+
 <div class="book-grid" id="bookGrid"></div>
 
 <nav class="bottom-nav">
     <button class="nav-btn active" onclick="location.href='index.html'">
         <i class="fa-solid fa-house"></i>হোম
     </button>
-    <button class="nav-btn">
+    <button class="nav-btn" onclick="toggleCategoryScroll()">
         <i class="fa-solid fa-layer-group"></i>বিভাগ
     </button>
     <button class="nav-btn" onclick="toggleCart()">
@@ -371,7 +421,7 @@
             grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:50px; color:#888;">এখনও কোনো বই যোগ করা হয়নি।</p>';
             return;
         }
-        grid.innerHTML = books.map((book, index) => `
+        grid.innerHTML = books.map((book) => `
             <div class="book-card">
                 <div class="book-clickable" onclick="goToDetails('${book.id}')">
                     <img src="${book.img}">
@@ -389,19 +439,37 @@
         `).join('');
     }
 
+    // ৩. ক্যাটাগরি ফিল্টার লজিক
+    function filterByCategory(category, btn) {
+        // সব বাটনের একটিভ ক্লাস সরানো
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        // ক্লিক করা বাটনে একটিভ ক্লাস দেওয়া
+        btn.classList.add('active');
+
+        if(category === 'all') {
+            displayBooks(allBooks);
+        } else {
+            const filtered = allBooks.filter(book => book.category === category);
+            displayBooks(filtered);
+        }
+    }
+
+    function toggleCategoryScroll() {
+        window.scrollTo({ top: 200, behavior: 'smooth' });
+    }
+
     function goToDetails(id) {
         window.location.href = `details.html?id=${id}`;
     }
 
-    // ৩. কার্ট সিস্টেম (userCart কী ব্যবহার করা হয়েছে)
+    // ৪. কার্ট সিস্টেম
     function addToCart(bookId){
         const bookToAdd = allBooks.find(b => b.id == bookId);
         if(!bookToAdd) return;
 
         let cart = JSON.parse(localStorage.getItem('userCart')) || [];
-        
-        // চেক করা হচ্ছে যেন একই বই বারবার অ্যাড না হয়
         const exists = cart.find(item => item.id === bookId);
+        
         if (!exists) {
             cart.push(bookToAdd);
             localStorage.setItem('userCart', JSON.stringify(cart));
@@ -418,7 +486,6 @@
         const badge = document.getElementById('cartBadge');
         let cart = JSON.parse(localStorage.getItem('userCart')) || [];
 
-        // আপডেট ব্যাজ
         if(cart.length > 0) {
             badge.innerText = cart.length;
             badge.style.display = "block";
@@ -432,7 +499,7 @@
         }
 
         let total = 0;
-        let html = cart.map((item, i) => {
+        let html = cart.map((item) => {
             total += parseInt(item.price);
             return `
                 <div class="cart-item">
@@ -464,21 +531,20 @@
     }
 
     function goToCheckout() {
-        // প্রথম বইয়ের আইডি নিয়ে চেকআউটে পাঠানো
         let cart = JSON.parse(localStorage.getItem('userCart')) || [];
         if(cart.length > 0) {
             location.href = "checkout.html?id=" + cart[0].id;
         }
     }
 
-    // ৪. ড্রয়ার ফাংশন
+    // ৫. ড্রয়ার ও অন্যান্য ফাংশন
     function toggleMenu(){
         document.getElementById('menuDrawer').classList.toggle('open');
         document.getElementById('menuOverlay').style.display = document.getElementById('menuDrawer').classList.contains('open') ? 'block' : 'none';
     }
 
     function toggleCart(){
-        updateCartUI(); // ওপেন করার আগে ডাটা আপডেট
+        updateCartUI();
         document.getElementById('cartDrawer').classList.toggle('open');
         document.getElementById('cartOverlay').style.display = document.getElementById('cartDrawer').classList.contains('open') ? 'block' : 'none';
     }
@@ -489,7 +555,6 @@
         displayBooks(filtered);
     }
 
-    // ৫. স্লাইডার
     let slideIdx = 0;
     function runSlider(){
         const slides = document.querySelectorAll(".slide");
@@ -504,7 +569,7 @@
 
     window.onload = () => {
         loadBooks();
-        updateCartUI(); // পেজ লোডেই কার্ট আপডেট
+        updateCartUI();
         
         const dotsCont = document.getElementById("sliderDots");
         const slides = document.querySelectorAll(".slide");
