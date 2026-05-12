@@ -341,23 +341,19 @@
     let cart = [];
     let allBooks = [];
 
-    // ১. বই লোড করা এবং ডিটেইলস পেজের সাথে কানেক্ট করা
+    // ১. এডমিন পেজ থেকে বই লোড করা (ডিফল্ট বই রিমুভ করা হয়েছে)
     function loadBooks(){
-        const storedBooks = JSON.parse(localStorage.getItem('myBooks')) || [];
-        
-        // ডিফল্ট কিছু বই যদি স্টোরেজে না থাকে
-        const defaultBooks = [
-            { id: 101, title:"হুমায়ূন আহমেদের শ্রেষ্ঠ উপন্যাস", price:450, img:"https://via.placeholder.com/150x180?text=Book+1", desc: "হুমায়ূন আহমেদের অসাধারণ কিছু উপন্যাসের সংকলন।" },
-            { id: 102, title:"প্যারাডক্সিক্যাল সাজিদ", price:280, img:"https://via.placeholder.com/150x180?text=Book+2", desc: "আরিফ আজাদের একটি জনপ্রিয় বই।" }
-        ];
-
-        allBooks = storedBooks.length > 0 ? storedBooks : defaultBooks;
+        allBooks = JSON.parse(localStorage.getItem('myBooks')) || [];
         displayBooks(allBooks);
     }
 
-    // ২. বই প্রদর্শন (ক্লিকেবল ইমেজ ও টাইটেল সহ)
+    // ২. বই প্রদর্শন
     function displayBooks(books){
         const grid = document.getElementById('bookGrid');
+        if(books.length === 0){
+            grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:50px; color:#888;">এখনও কোনো বই যোগ করা হয়নি।</p>';
+            return;
+        }
         grid.innerHTML = books.map((book, index) => `
             <div class="book-card">
                 <div class="book-clickable" onclick="goToDetails('${book.id || index}')">
@@ -376,12 +372,10 @@
         `).join('');
     }
 
-    // ৩. ডিটেইলস পেজে রিডাইরেক্ট
     function goToDetails(id) {
         window.location.href = `details.html?id=${id}`;
     }
 
-    // ৪. কার্ট ফাংশনালিটি
     function addToCart(index){
         cart.push(allBooks[index]);
         updateCart();
@@ -436,11 +430,11 @@
         displayBooks(filtered);
     }
 
-    // স্লাইডার লজিক
     let slideIdx = 0;
     function runSlider(){
         const slides = document.querySelectorAll(".slide");
         const dots = document.querySelectorAll(".dot");
+        if(slides.length === 0) return;
         slides.forEach(s => s.classList.remove("active"));
         dots.forEach(d => d.classList.remove("active"));
         slideIdx = (slideIdx + 1) % slides.length;
@@ -451,12 +445,13 @@
     window.onload = () => {
         loadBooks();
         const dotsCont = document.getElementById("sliderDots");
-        document.querySelectorAll(".slide").forEach((_, i) => {
+        const slides = document.querySelectorAll(".slide");
+        slides.forEach((_, i) => {
             const d = document.createElement("div");
             d.className = i === 0 ? "dot active" : "dot";
             dotsCont.appendChild(d);
         });
-        setInterval(runSlider, 4000);
+        if(slides.length > 0) setInterval(runSlider, 4000);
     };
 </script>
 </body>
