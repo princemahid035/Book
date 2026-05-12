@@ -24,7 +24,6 @@
             padding-bottom:85px;
         }
 
-        /* হেডার ও সার্চ বার (আপনার আগের স্টাইল) */
         header{
             background:var(--white);
             padding:12px 15px;
@@ -42,43 +41,23 @@
             margin:0 auto;
         }
 
-        .logo{
-            font-weight:700;
-            font-size:20px;
-            color:var(--primary-blue);
-            text-decoration:none;
-        }
+        .logo{ font-weight:700; font-size:20px; color:var(--primary-blue); text-decoration:none; }
 
         .search-container{
-            flex:1;
-            display:flex;
-            background:#F1F3F4;
-            border-radius:12px;
-            padding:2px 5px;
-            align-items:center;
-            border:1px solid #E0E0E0;
+            flex:1; display:flex; background:#F1F3F4; border-radius:12px;
+            padding:2px 5px; align-items:center; border:1px solid #E0E0E0;
         }
 
         .search-container input{
-            border:none;
-            padding:10px;
-            background:transparent;
-            width:100%;
-            outline:none;
-            font-family:'Hind Siliguri';
+            border:none; padding:10px; background:transparent; width:100%;
+            outline:none; font-family:'Hind Siliguri';
         }
 
         .search-btn{
-            background:var(--primary-blue);
-            color:white;
-            border:none;
-            width:32px;
-            height:32px;
-            border-radius:8px;
-            cursor:pointer;
+            background:var(--primary-blue); color:white; border:none;
+            width:32px; height:32px; border-radius:8px; cursor:pointer;
         }
 
-        /* সেকশন কন্ট্রোল */
         .page-section { display: none; }
         .page-section.active { display: block; }
 
@@ -99,40 +78,39 @@
             display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;
         }
 
-        /* ক্যাটাগরি */
-        .category-wrapper { padding: 10px 0 10px 15px; background: var(--white); margin-bottom: 5px; }
-        .category-scroll { display: flex; overflow-x: auto; gap: 10px; }
-        .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-btn {
-            padding: 8px 18px; border-radius: 20px; border: 1px solid #ddd;
-            background: #fff; font-family: 'Hind Siliguri'; font-weight: 600; white-space: nowrap;
-        }
-        .cat-btn.active { background: var(--primary-blue); color: #fff; }
-
-        /* বুক গ্রিড */
+        /* বুক কার্ড */
         .book-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:15px; padding:15px; }
         .book-card{
             background:var(--white); border-radius:15px; overflow:hidden;
             box-shadow:0 4px 15px rgba(0,0,0,0.05); border:1px solid #f0f0f0;
         }
-        .book-card img{ width:100%; height:180px; object-fit:cover; }
+        .book-card img{ width:100%; height:180px; object-fit:cover; cursor: pointer; }
         .book-info{ padding:12px; }
         .book-info h4{ font-size:14px; margin-bottom:8px; height: 40px; overflow: hidden; color: var(--primary-blue); }
-        .price{ color:var(--accent-orange); font-weight:800; }
-        .cart-btn{ width:100%; background:var(--primary-blue); color:white; border:none; padding:10px; border-radius:10px; font-family:'Hind Siliguri'; cursor:pointer; }
+        .price{ color:var(--accent-orange); font-weight:800; margin-bottom: 8px; }
+        .cart-btn{ width:100%; background:var(--primary-blue); color:white; border:none; padding:10px; border-radius:10px; font-family:'Hind Siliguri'; cursor:pointer; font-weight: 600; }
 
-        /* নতুন বই সেকশন ব্যানার */
-        .new-arrival-banner {
-            width: 100%; height: 180px;
-            background: url('https://images.unsplash.com/photo-1544640808-32ca72ac7f67?q=80&w=1000') center/cover;
-            position: relative; margin-bottom: 10px;
+        /* ড্রয়ার ও কার্ট স্টাইল */
+        .drawer-overlay{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:2000; }
+        .drawer{
+            position:fixed; bottom:-100%; left:0; width:100%; background:var(--white);
+            border-radius:20px 20px 0 0; padding:20px; transition:0.4s; z-index:2001; max-height: 80vh; overflow-y: auto;
         }
-        .banner-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.5);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;
+        .drawer.open{ bottom:0; }
+
+        .cart-item {
+            display: flex; align-items: center; gap: 15px; padding: 10px 0; border-bottom: 1px solid #eee;
+        }
+        .cart-item img { width: 50px; height: 70px; object-fit: cover; border-radius: 5px; }
+        .cart-item-info { flex: 1; }
+        .remove-item { color: #ff4757; cursor: pointer; border: none; background: none; font-size: 18px; }
+
+        .checkout-btn {
+            width: 100%; background: var(--accent-orange); color: white; border: none;
+            padding: 15px; border-radius: 12px; margin-top: 20px; font-size: 16px; font-weight: 700; cursor: pointer;
         }
 
-        /* বটম নেভিগেশন (আপনার আগের ৪টি বাটন) */
+        /* বটম নেভিগেশন */
         .bottom-nav{
             position:fixed; bottom:0; width:100%; background:var(--white);
             display:flex; justify-content:space-around; padding:12px 0;
@@ -140,22 +118,13 @@
         }
         .nav-btn{
             background:none; border:none; color:#b2bec3;
-            font-family:'Hind Siliguri'; font-size:11px; text-align:center; cursor: pointer;
+            font-family:'Hind Siliguri'; font-size:11px; text-align:center; cursor: pointer; position: relative;
         }
         .nav-btn.active{ color:var(--primary-blue); }
         .nav-btn i{ font-size:20px; display:block; margin-bottom:4px; }
-
-        /* ড্রয়ার মেনু */
-        .drawer-overlay{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:2000; }
-        .drawer{
-            position:fixed; bottom:-100%; left:0; width:100%; background:var(--white);
-            border-radius:20px 20px 0 0; padding:20px; transition:0.4s; z-index:2001;
-        }
-        .drawer.open{ bottom:0; }
-        .drawer-item {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
-            text-decoration: none; color: var(--primary-blue); background: #f8f9fa;
-            border-radius: 12px; margin-bottom: 10px; font-weight: 600;
+        #cart-count {
+            position: absolute; top: -5px; right: 5px; background: var(--accent-orange);
+            color: white; font-size: 10px; padding: 2px 6px; border-radius: 50%;
         }
     </style>
 </head>
@@ -163,9 +132,7 @@
 
 <header>
     <div class="nav-top">
-        <a href="#" class="logo" onclick="navigateTo('home')">
-            MY<span style="color:var(--accent-orange)">GRAM</span>
-        </a>
+        <a href="#" class="logo" onclick="navigateTo('home')">MY<span style="color:var(--accent-orange)">GRAM</span></a>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="বই খুঁজুন..." onkeyup="searchBooks()">
             <button class="search-btn"><i class="fa fa-search"></i></button>
@@ -176,45 +143,40 @@
 <div id="home-section" class="page-section active">
     <div class="slider-container">
         <div class="slide active" style="background-image:url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1000');">
-            <div class="slide-overlay"><h2>বইয়ের দুনিয়ায় স্বাগতম</h2><p>সেরা সংগ্রহ থেকে বেছে নিন</p></div>
-        </div>
-        <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1000');">
-            <div class="slide-overlay"><h2>বিশেষ ছাড়</h2><p>সব বইয়ে ২০% পর্যন্ত ডিসকাউন্ট</p></div>
+            <div class="slide-overlay"><h2>বইয়ের মেলা</h2><p>আপনার পছন্দের বই কিনুন সহজে</p></div>
         </div>
     </div>
-
-    <div class="category-wrapper">
-        <div class="category-scroll">
-            <button class="cat-btn active" onclick="filterBooks('all', this)">সব বই</button>
-            <button class="cat-btn" onclick="filterBooks('বিজ্ঞান', this)">বিজ্ঞান</button>
-            <button class="cat-btn" onclick="filterBooks('গল্প', this)">গল্প</button>
-            <button class="cat-btn" onclick="filterBooks('ইতিহাস', this)">ইতিহাস</button>
-        </div>
-    </div>
-
     <div class="book-grid" id="homeBookGrid"></div>
 </div>
 
 <div id="new-books-section" class="page-section">
-    <div class="new-arrival-banner">
-        <div class="banner-overlay">
-            <h1>নতুন কালেকশন</h1>
-            <p>সদ্য যুক্ত হওয়া বইগুলো দেখুন</p>
-        </div>
-    </div>
+    <div style="padding: 20px; text-align: center; background: var(--primary-blue); color: white;"><h2>নতুন বইসমূহ</h2></div>
     <div class="book-grid" id="newArrivalGrid"></div>
 </div>
 
-<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
-<div class="drawer" id="sideDrawer">
+<div class="drawer-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="drawer" id="cartDrawer">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h3>মেনু</h3>
-        <i class="fa fa-times" onclick="toggleDrawer()" style="cursor:pointer; font-size:20px;"></i>
+        <h3>আপনার কার্ট</h3>
+        <i class="fa fa-times" onclick="toggleCart()" style="cursor:pointer; font-size:20px;"></i>
     </div>
-    <a href="#" class="drawer-item"><i class="fa fa-info-circle"></i> আমাদের সম্পর্কে</a>
-    <a href="#" class="drawer-item"><i class="fa fa-shield-alt"></i> গোপনীয়তা নীতি</a>
-    <a href="#" class="drawer-item"><i class="fa fa-file-alt"></i> শর্তাবলী</a>
-    <a href="#" class="drawer-item"><i class="fa fa-envelope"></i> যোগাযোগ</a>
+    <div id="cartItemsList">
+        </div>
+    <div id="cartTotalArea" style="margin-top: 20px; border-top: 2px solid #eee; padding-top: 15px; display: none;">
+        <div style="display: flex; justify-content: space-between; font-weight: 700;">
+            <span>মোট:</span>
+            <span id="totalPriceText">৳ 0</span>
+        </div>
+        <button class="checkout-btn" onclick="alert('অর্ডার সফল হয়েছে!')">অর্ডার সম্পন্ন করুন</button>
+    </div>
+</div>
+
+<div class="drawer-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<div class="drawer" id="menuDrawer">
+    <h3>মেনু</h3>
+    <hr style="margin: 15px 0;">
+    <a href="#" style="display:block; padding: 10px 0; text-decoration:none; color: #333;">আমাদের সম্পর্কে</a>
+    <a href="#" style="display:block; padding: 10px 0; text-decoration:none; color: #333;">গোপনীয়তা নীতি</a>
 </div>
 
 <nav class="bottom-nav">
@@ -224,18 +186,112 @@
     <button class="nav-btn" id="btn-new" onclick="navigateTo('new-books')">
         <i class="fa-solid fa-fire"></i>নতুন বই
     </button>
-    <button class="nav-btn">
-        <i class="fa-solid fa-cart-shopping"></i>কার্ট
+    <button class="nav-btn" onclick="toggleCart()">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cart-count">0</span>কার্ট
     </button>
-    <button class="nav-btn" onclick="toggleDrawer()">
+    <button class="nav-btn" onclick="toggleMenu()">
         <i class="fa-solid fa-bars"></i>মেনু
     </button>
 </nav>
 
 <script>
-    let allBooks = JSON.parse(localStorage.getItem('myBooks')) || [];
+    // ডামি প্রোডাক্ট লিস্ট
+    const allBooks = [
+        {id: 1, title: 'হিমুর নীলপদ্ম', price: 250, img: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1000'},
+        {id: 2, title: 'প্যারাডক্সিক্যাল সাজিদ', price: 300, img: 'https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=1000'},
+        {id: 3, title: 'সায়েন্স ফিকশন', price: 180, img: 'https://images.unsplash.com/photo-1532012197367-6849412638d1?q=80&w=1000'},
+        {id: 4, title: 'অপেক্ষা', price: 220, img: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1000'}
+    ];
 
-    // রিফ্রেশ ছাড়া নেভিগেশন
+    let cart = JSON.parse(localStorage.getItem('mygram_cart')) || [];
+
+    // বই প্রদর্শন
+    function displayBooks(books, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = books.map(book => `
+            <div class="book-card">
+                <img src="${book.img}">
+                <div class="book-info">
+                    <h4>${book.title}</h4>
+                    <p class="price">৳ ${book.price}</p>
+                    <button class="cart-btn" onclick="addToCart(${book.id})">কার্টে যোগ করুন</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // কার্টে যোগ করার ফাংশন
+    function addToCart(bookId) {
+        const book = allBooks.find(b => b.id === bookId);
+        const exists = cart.find(item => item.id === bookId);
+
+        if (exists) {
+            alert("বইটি ইতিমধ্যে কার্টে আছে।");
+        } else {
+            cart.push(book);
+            updateCart();
+            alert("কার্টে যোগ করা হয়েছে!");
+        }
+    }
+
+    // কার্ট আপডেট
+    function updateCart() {
+        localStorage.setItem('mygram_cart', JSON.stringify(cart));
+        document.getElementById('cart-count').innerText = cart.length;
+        renderCartItems();
+    }
+
+    // কার্ট আইটেম লিস্ট দেখানো
+    function renderCartItems() {
+        const list = document.getElementById('cartItemsList');
+        const totalArea = document.getElementById('cartTotalArea');
+        const totalText = document.getElementById('totalPriceText');
+
+        if (cart.length === 0) {
+            list.innerHTML = '<p style="text-align:center; padding:20px;">আপনার কার্ট খালি!</p>';
+            totalArea.style.display = 'none';
+            return;
+        }
+
+        totalArea.style.display = 'block';
+        let total = 0;
+
+        list.innerHTML = cart.map((item, index) => {
+            total += item.price;
+            return `
+                <div class="cart-item">
+                    <img src="${item.img}">
+                    <div class="cart-item-info">
+                        <h5>${item.title}</h5>
+                        <p>৳ ${item.price}</p>
+                    </div>
+                    <button class="remove-item" onclick="removeFromCart(${index})"><i class="fa fa-trash"></i></button>
+                </div>
+            `;
+        }).join('');
+
+        totalText.innerText = `৳ ${total}`;
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    function toggleCart() {
+        document.getElementById('cartDrawer').classList.toggle('open');
+        document.getElementById('cartOverlay').style.display = 
+            document.getElementById('cartDrawer').classList.contains('open') ? 'block' : 'none';
+        renderCartItems();
+    }
+
+    function toggleMenu() {
+        document.getElementById('menuDrawer').classList.toggle('open');
+        document.getElementById('menuOverlay').style.display = 
+            document.getElementById('menuDrawer').classList.contains('open') ? 'block' : 'none';
+    }
+
     function navigateTo(sectionId) {
         document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -243,67 +299,18 @@
         if(sectionId === 'home') {
             document.getElementById('home-section').classList.add('active');
             document.getElementById('btn-home').classList.add('active');
-            displayBooks(allBooks, 'homeBookGrid');
-        } else if(sectionId === 'new-books') {
+        } else {
             document.getElementById('new-books-section').classList.add('active');
             document.getElementById('btn-new').classList.add('active');
             displayBooks([...allBooks].reverse(), 'newArrivalGrid');
         }
-        window.scrollTo(0, 0);
     }
-
-    function displayBooks(books, containerId) {
-        const container = document.getElementById(containerId);
-        if(books.length === 0) {
-            container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:30px;">কোনো বই নেই</p>';
-            return;
-        }
-        container.innerHTML = books.map(book => `
-            <div class="book-card">
-                <img src="${book.img}" onclick="window.location.href='details.html?id=${book.id}'">
-                <div class="book-info">
-                    <h4>${book.title}</h4>
-                    <p class="price">৳ ${book.price}</p>
-                    <button class="cart-btn">কার্টে যোগ করুন</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function filterBooks(cat, btn) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filtered = cat === 'all' ? allBooks : allBooks.filter(b => b.category === cat);
-        displayBooks(filtered, 'homeBookGrid');
-    }
-
-    function searchBooks(){
-        const text = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allBooks.filter(b => b.title.toLowerCase().includes(text));
-        displayBooks(filtered, 'homeBookGrid');
-    }
-
-    function toggleDrawer() {
-        const drawer = document.getElementById('sideDrawer');
-        const overlay = document.getElementById('drawerOverlay');
-        drawer.classList.toggle('open');
-        overlay.style.display = drawer.classList.contains('open') ? 'block' : 'none';
-    }
-
-    // স্লাইডার লজিক
-    let slideIdx = 0;
-    setInterval(() => {
-        const slides = document.querySelectorAll('.slide');
-        if(slides.length > 0) {
-            slides[slideIdx].classList.remove('active');
-            slideIdx = (slideIdx + 1) % slides.length;
-            slides[slideIdx].classList.add('active');
-        }
-    }, 4000);
 
     window.onload = () => {
         displayBooks(allBooks, 'homeBookGrid');
+        updateCart();
     };
 </script>
+
 </body>
 </html>
