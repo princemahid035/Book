@@ -7,41 +7,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #1A374D; --accent: #FF6B35; --bg: #F7FAFC; }
+        :root { --primary: #1A374D; --accent: #FF6B35; --bg: #F7FAFC; --white: #ffffff; }
         body { font-family: 'Hind Siliguri', sans-serif; background: var(--bg); margin: 0; padding-bottom: 120px; }
         header { position: sticky; top: 0; background: #fff; padding: 15px; display: flex; align-items: center; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .back-btn { font-size: 20px; margin-right: 15px; cursor: pointer; color: var(--primary); }
         
+        /* Product UI */
         .product-container { background: #fff; padding: 20px; text-align: center; border-bottom: 1px solid #eee; }
         .product-container img { max-width: 180px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         
         .info-section { background: #fff; padding: 20px; }
         .p-title { font-size: 22px; font-weight: 700; color: var(--primary); margin: 10px 0 5px 0; }
-        
-        /* লেখক ও প্রকাশনীর স্টাইল */
         .p-meta { font-size: 14px; color: #555; margin-bottom: 15px; line-height: 1.8; }
-        .p-meta strong { color: var(--primary); }
-
         .p-price { font-size: 26px; font-weight: 800; color: var(--accent); margin-bottom: 15px; }
-
-        .shipping-card { border: 1px solid #eee; border-radius: 12px; padding: 15px; background: #fdfdfd; }
-        .ship-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 14px; }
-        .ship-item i { color: var(--primary); background: #f0f7ff; padding: 8px; border-radius: 6px; }
 
         .section-box { background: #fff; padding: 20px; margin-top: 10px; border-top: 1px solid #eee; }
         
-        /* Review CSS */
-        .review-input-group { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .review-input-group input, .review-input-group textarea { 
-            padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; outline: none;
-        }
-        .review-input-group input:focus, .review-input-group textarea:focus { border-color: var(--accent); }
-        .btn-rev { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-        .review-item { padding: 15px; border-bottom: 1px solid #eee; background: #fafafa; border-radius: 8px; margin-bottom: 10px; }
+        /* Empty State */
+        .no-product { text-align: center; padding: 50px 20px; color: #888; }
+        .no-product i { font-size: 50px; margin-bottom: 15px; color: #ddd; }
 
-        .bottom-bar { position: fixed; bottom: 0; width: 100%; background: #fff; padding: 15px; display: flex; gap: 10px; box-sizing: border-box; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-        .btn-cart { flex: 1; padding: 15px; border-radius: 10px; border: 2px solid var(--primary); background: #fff; color: var(--primary); font-weight: 700; cursor: pointer; }
-        .btn-buy { flex: 1; padding: 15px; border-radius: 10px; border: none; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
+        /* Floating Action Buttons */
+        .action-container {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 85%; max-width: 400px; background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px); padding: 12px; border-radius: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); z-index: 2000;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        .btn-cart-circle {
+            width: 50px; height: 50px; background: #fff; border: 2px solid var(--primary);
+            color: var(--primary); border-radius: 50%; display: flex;
+            justify-content: center; align-items: center; cursor: pointer; transition: 0.3s;
+        }
+        .btn-buy-capsule {
+            flex: 1; margin-left: 15px; height: 50px; background: var(--primary);
+            color: #fff; border: none; border-radius: 50px; font-weight: 700;
+            cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+
+        #action-bar { display: none; } /* শুরুতে হাইড থাকবে */
     </style>
 </head>
 <body>
@@ -54,19 +60,13 @@
 <div id="product-view">
     </div>
 
-<div class="section-box">
-    <h3 style="margin:0 0 15px 0;">পাঠক রিভিউ</h3>
-    <div class="review-input-group">
-        <input type="text" id="revName" placeholder="আপনার নাম">
-        <textarea id="revText" rows="3" placeholder="আপনার মতামত লিখুন..."></textarea>
-        <button class="btn-rev" onclick="saveReview()">রিভিউ দিন</button>
-    </div>
-    <div id="reviewList" style="margin-top:20px;"></div>
-</div>
-
-<div class="bottom-bar">
-    <button class="btn-cart" onclick="addToCart()">Add To Cart</button>
-    <button class="btn-buy" onclick="buyNow()">Buy Now</button>
+<div class="action-container" id="action-bar">
+    <button class="btn-cart-circle" onclick="addToCart()">
+        <i class="fa-solid fa-cart-shopping"></i>
+    </button>
+    <button class="btn-buy-capsule" onclick="buyNow()">
+        অর্ডার করুন <i class="fa-solid fa-bolt"></i>
+    </button>
 </div>
 
 <script>
@@ -75,79 +75,64 @@
     let currentBook = null;
 
     function init() {
-        // localStorage থেকে সব বই নিয়ে আসা
+        // localStorage থেকে বইয়ের লিস্ট নেওয়া
         const books = JSON.parse(localStorage.getItem('myBooks')) || [];
         
-        // সঠিক বইটি খুঁজে বের করা
-        currentBook = books.find(b => b.id == bookId) || books[bookId];
+        // আইডি ম্যাচ করে বই খোঁজা
+        if (bookId) {
+            currentBook = books.find(b => b.id == bookId);
+        }
 
+        const view = document.getElementById('product-view');
+        const actionBar = document.getElementById('action-bar');
+
+        // যদি বই না পাওয়া যায়
         if(!currentBook) {
-            document.getElementById('product-view').innerHTML = "<p style='padding:20px; text-align:center;'>বইটি খুঁজে পাওয়া যায়নি!</p>";
+            view.innerHTML = `
+                <div class="no-product">
+                    <i class="fa-solid fa-box-open"></i>
+                    <h3>দুঃখিত, কোনো তথ্য পাওয়া যায়নি!</h3>
+                    <p>দয়া করে হোম পেজ থেকে আবার চেষ্টা করুন।</p>
+                    <button onclick="location.href='index.html'" style="padding:10px 20px; border-radius:5px; border:none; background:var(--primary); color:white;">হোম পেজে যান</button>
+                </div>`;
+            actionBar.style.display = "none";
             return;
         }
 
-        // HTML এ ডেটা বসানো (প্রকাশনী ও লেখক সহ)
-        document.getElementById('product-view').innerHTML = `
-            <div class="product-container"><img src="${currentBook.img}"></div>
+        // বই পাওয়া গেলে তা রেন্ডার করা
+        actionBar.style.display = "flex";
+        view.innerHTML = `
+            <div class="product-container"><img src="${currentBook.img}" alt="${currentBook.title}"></div>
             <div class="info-section">
                 <h1 class="p-title">${currentBook.title}</h1>
-                
                 <div class="p-meta">
-                    <strong>লেখক:</strong> ${currentBook.author || 'অজানা লেখক'}<br>
-                    <strong>প্রকাশনী:</strong> ${currentBook.pub || 'অজানা প্রকাশনী'}
+                    <strong>লেখক:</strong> ${currentBook.author || 'অজানা'}<br>
+                    <strong>প্রকাশনী:</strong> ${currentBook.pub || 'অজানা'}
                 </div>
-
                 <div class="p-price">৳ ${currentBook.price}</div>
-                
-                <div class="shipping-card">
-                    <div class="ship-item"><i class="fa fa-truck"></i> <span>ঢাকা: ৳ ৫০ (১-৩ দিন)</span></div>
-                    <div class="ship-item"><i class="fa fa-globe"></i> <span>ঢাকার বাইরে: ৳ ১০০ (৩-৫ দিন)</span></div>
-                </div>
             </div>
             <div class="section-box">
                 <h3 style="margin:0 0 10px 0">বইয়ের বিবরণ</h3>
-                <p style="color:#666; line-height:1.6; margin:0;">${currentBook.desc || 'এই বইটির কোনো বিস্তারিত বিবরণ দেওয়া নেই।'}</p>
+                <p style="color:#666; line-height:1.6; margin:0;">${currentBook.desc || 'কোনো বিবরণ নেই।'}</p>
             </div>
         `;
-        loadReviews();
     }
 
-    function saveReview() {
-        const name = document.getElementById('revName').value;
-        const text = document.getElementById('revText').value;
-        if(!name || !text) return alert("দয়া করে নাম এবং মতামত দুটোই লিখুন");
-
-        let reviews = JSON.parse(localStorage.getItem('reviews_' + bookId)) || [];
-        reviews.push({name, text});
-        localStorage.setItem('reviews_' + bookId, JSON.stringify(reviews));
-        
-        document.getElementById('revName').value = "";
-        document.getElementById('revText').value = "";
-        loadReviews();
-    }
-
-    function loadReviews() {
-        const reviews = JSON.parse(localStorage.getItem('reviews_' + bookId)) || [];
-        const container = document.getElementById('reviewList');
-        if(reviews.length === 0) {
-            container.innerHTML = "<small style='color:#999'>এখনো কোনো রিভিউ নেই। প্রথম রিভিউটি আপনিই দিন!</small>";
-            return;
+    function addToCart() {
+        let cart = JSON.parse(localStorage.getItem('userCart')) || [];
+        // চেক করা হচ্ছে যেন একই বই বারবার অ্যাড না হয়
+        const exists = cart.find(item => item.id === currentBook.id);
+        if (!exists) {
+            cart.push(currentBook);
+            localStorage.setItem('userCart', JSON.stringify(cart));
+            alert("কার্টে যোগ করা হয়েছে!");
+        } else {
+            alert("বইটি ইতিমধ্যে কার্টে আছে।");
         }
-        container.innerHTML = reviews.reverse().map(r => `
-            <div class="review-item">
-                <strong style="display:block; color:var(--primary); margin-bottom:5px;">${r.name}</strong>
-                <span style="font-size:14px; color:#555; line-height:1.4;">${r.text}</span>
-            </div>
-        `).join('');
     }
 
-    function buyNow() { 
-        // চেকআউট পেজে নিয়ে যাওয়ার আগে চেক করুন ফাইলটি আছে কিনা
-        location.href = "checkout.html?id=" + bookId; 
-    }
-
-    function addToCart() { 
-        alert("বইটি আপনার কার্টে যোগ করা হয়েছে!"); 
+    function buyNow() {
+        location.href = "checkout.html?id=" + bookId;
     }
 
     window.onload = init;
