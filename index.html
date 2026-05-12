@@ -47,14 +47,13 @@
         .slide.active{ opacity:1; }
         .slide-overlay{ background:rgba(26,55,77,0.6); width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px; }
 
-        /* CATEGORY SECTION */
+        /* CATEGORY */
         .cat-section { padding: 10px 15px; background: var(--white); margin-bottom: 10px; }
         .cat-title { font-weight: 700; color: var(--primary-blue); margin-bottom: 15px; display: block; }
         .cat-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 10px; }
         .cat-scroll::-webkit-scrollbar { display: none; }
         .cat-item { text-align: center; min-width: 70px; cursor: pointer; }
         .cat-icon { width: 55px; height: 55px; background: #f1f3f4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; color: var(--primary-blue); font-size: 20px; transition: 0.3s; }
-        .cat-item:hover .cat-icon { background: var(--accent-orange); color: white; }
 
         /* PAGE CONTENT */
         .page-content { display: none; }
@@ -76,22 +75,18 @@
         .nav-btn i{ font-size:20px; display:block; margin-bottom:4px; }
         #cart-badge { position: absolute; top: -5px; right: 5px; background: var(--accent-orange); color: white; font-size: 10px; padding: 2px 6px; border-radius: 50%; display: none; }
 
-        /* DRAWER & OVERLAYS */
+        /* DRAWER */
         .drawer-overlay{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:2000; }
         .drawer{ position:fixed; bottom:-100%; left:0; width:100%; background:var(--white); border-radius:25px 25px 0 0; padding:25px; transition:0.4s; z-index:2001; max-height:85vh; overflow-y:auto; }
         .drawer.open{ bottom:0; }
 
-        /* MENU LIST */
-        .menu-list { list-style: none; margin-top: 10px; }
-        .menu-link { display: flex; align-items: center; gap: 15px; padding: 15px; text-decoration: none; color: var(--text-dark); background: #f8f9fa; border-radius: 12px; margin-bottom: 10px; font-weight: 600; }
-        .menu-link i { color: var(--primary-blue); font-size: 18px; width: 25px; }
-
-        /* CART LIST */
+        /* CART ITEM */
         .cart-item { display: flex; align-items: center; gap: 15px; padding: 12px 0; border-bottom: 1px solid #eee; }
-        .cart-item img { width: 50px; height: 70px; object-fit: cover; border-radius: 8px; }
+        .cart-item img { width: 50px; height: 65px; object-fit: cover; border-radius: 8px; }
         .cart-details { flex: 1; }
-        .remove-btn { color: #ff4757; background: none; border: none; cursor: pointer; }
-        .cart-total-box { margin-top: 20px; padding: 15px; background: var(--primary-blue); color: white; border-radius: 15px; text-align: center; }
+        .cart-details h5 { font-size: 14px; margin: 0; }
+        .remove-btn { color: #ff4757; background: none; border: none; cursor: pointer; font-size: 16px; }
+        .cart-total-box { margin-top: 15px; padding: 15px; background: var(--primary-blue); color: white; border-radius: 12px; text-align: center; }
     </style>
 </head>
 <body>
@@ -114,7 +109,6 @@
             <div class="slide-overlay"><h2>বইয়ের দুনিয়ায় স্বাগতম</h2><p>সেরা সংগ্রহ থেকে বেছে নিন</p></div>
         </div>
     </div>
-
     <div class="cat-section">
         <span class="cat-title">জনপ্রিয় বিভাগ</span>
         <div class="cat-scroll">
@@ -128,9 +122,8 @@
 </div>
 
 <div id="newBooksPage" class="page-content">
-    <div style="padding: 25px; text-align: center; background: linear-gradient(45deg, var(--primary-blue), #2c5364); color: white;">
-        <h2 style="margin: 0;">নতুন কালেকশন</h2>
-        <p style="font-size: 13px; opacity: 0.9;">সেরা ১০টি নতুন বইয়ের তালিকা</p>
+    <div style="padding: 25px; text-align: center; background: var(--primary-blue); color: white;">
+        <h2>নতুন কালেকশন</h2>
     </div>
     <div class="book-grid" id="newBooksGrid"></div>
 </div>
@@ -147,45 +140,34 @@
 
 <div class="drawer-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 <div class="drawer" id="menuDrawer">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-        <h3>মেনু অপশন</h3>
-        <i class="fa fa-times" onclick="toggleMenu()" style="cursor:pointer; font-size: 20px;"></i>
-    </div>
-    <div class="menu-list">
-        <a href="#" class="menu-link"><i class="fa fa-info-circle"></i> আমাদের সম্পর্কে</a>
-        <a href="#" class="menu-link"><i class="fa fa-user-shield"></i> গোপনীয়তা নীতি</a>
-        <a href="#" class="menu-link"><i class="fa fa-envelope"></i> যোগাযোগ করুন</a>
-    </div>
+    <h3>মেনু অপশন</h3><br>
+    <a href="#" class="menu-link" style="display:block; padding:15px; background:#f8f9fa; border-radius:10px; margin-bottom:10px; text-decoration:none; color:#333;">আমাদের সম্পর্কে</a>
+    <a href="#" class="menu-link" style="display:block; padding:15px; background:#f8f9fa; border-radius:10px; text-decoration:none; color:#333;">গোপনীয়তা নীতি</a>
 </div>
 
 <div class="drawer-overlay" id="cartOverlay" onclick="toggleCart()"></div>
 <div class="drawer" id="cartDrawer">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
         <h3>আপনার কার্ট</h3>
-        <i class="fa fa-times" onclick="toggleCart()" style="cursor:pointer"></i>
+        <i class="fa fa-times" onclick="toggleCart()" style="cursor:pointer; font-size:20px;"></i>
     </div>
-    <div id="cartItemsList"></div>
+    <div id="cartItemsList">
+        </div>
     <div id="cartFooter" style="display:none;">
         <div class="cart-total-box">
-            <h2 id="totalAmount">৳ 0</h2>
+            <h3 id="totalAmount">৳ 0</h3>
         </div>
-        <button onclick="alert('অর্ডার সফল!')" style="width:100%; background:var(--accent-orange); color:white; border:none; padding:15px; border-radius:12px; margin-top:15px; font-weight:700;">চেকআউট করুন</button>
+        <button onclick="alert('অর্ডার সফল!')" style="width:100%; background:var(--accent-orange); color:white; border:none; padding:15px; border-radius:12px; margin-top:15px; font-weight:700; cursor:pointer;">অর্ডার করুন</button>
     </div>
 </div>
 
 <script>
-    // বুক ডাটা
     const defaultBooks = [
         { id: 1, title:"অপেক্ষা - হুমায়ূন আহমেদ", price:250, img:"https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1000", category:"উপন্যাস", new: true },
         { id: 2, title:"হিমুর নীলপদ্ম", price:300, img:"https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1000", category:"গল্প", new: true },
         { id: 3, title:"প্যারাডক্সিক্যাল সাজিদ", price:280, img:"https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=1000", category:"ইসলামিক", new: true },
         { id: 4, title:"বেলা ফুরানোর আগে", price:320, img:"https://images.unsplash.com/photo-1532012197367-6849412638d1?q=80&w=1000", category:"ইসলামিক", new: true },
-        { id: 5, title:"জোছনা ও জননীর গল্প", price:450, img:"https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=1000", category:"উপন্যাস", new: true },
-        { id: 6, title:"মা - আনিসুল হক", price:260, img:"https://images.unsplash.com/photo-1511108690759-009324a90311?q=80&w=1000", category:"উপন্যাস", new: true },
-        { id: 7, title:"একাত্তরের দিনগুলি", price:350, img:"https://images.unsplash.com/photo-1531988041414-d05004e305a7?q=80&w=1000", category:"গল্প", new: true },
-        { id: 8, title:"জীবনানন্দ দাসের কবিতা", price:180, img:"https://images.unsplash.com/photo-1474932430478-367dbb6832c1?q=80&w=1000", category:"কবিতা", new: true },
-        { id: 9, title:"মহাজাগতিক কিউরেটর", price:400, img:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000", category:"বিজ্ঞান", new: true },
-        { id: 10, title:"বিদ্রোহী", price:150, img:"https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=1000", category:"কবিতা", new: true }
+        { id: 5, title:"জোছনা ও জননীর গল্প", price:450, img:"https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=1000", category:"উপন্যাস", new: true }
     ];
 
     let cart = JSON.parse(localStorage.getItem('myCart')) || [];
@@ -195,7 +177,7 @@
         const stored = JSON.parse(localStorage.getItem('myBooks')) || [];
         allBooks = stored.length > 0 ? stored : defaultBooks;
         displayBooks(allBooks, 'homeBookGrid');
-        updateCartUI();
+        updateCartCount();
     }
 
     function displayBooks(books, containerId){
@@ -223,20 +205,23 @@
         if(book){
             cart.push(book);
             localStorage.setItem('myCart', JSON.stringify(cart));
-            updateCartUI();
+            updateCartCount();
+            alert("কার্টে যোগ হয়েছে!");
         }
     }
 
-    function updateCartUI(){
-        const list = document.getElementById('cartItemsList');
+    function updateCartCount(){
         const badge = document.getElementById('cart-badge');
-        const footer = document.getElementById('cartFooter');
-        
         badge.innerText = cart.length;
         badge.style.display = cart.length > 0 ? 'block' : 'none';
+    }
 
+    function renderCartItems(){
+        const list = document.getElementById('cartItemsList');
+        const footer = document.getElementById('cartFooter');
+        
         if(cart.length === 0){
-            list.innerHTML = '<p style="text-align:center; padding:20px; color:#999;">কার্ট খালি!</p>';
+            list.innerHTML = '<p style="text-align:center; padding:30px; color:#999;">আপনার কার্টে কিছু নেই</p>';
             footer.style.display = 'none';
             return;
         }
@@ -262,17 +247,16 @@
     function removeFromCart(index){
         cart.splice(index, 1);
         localStorage.setItem('myCart', JSON.stringify(cart));
-        updateCartUI();
+        updateCartCount();
+        renderCartItems();
     }
 
     function showPage(page) {
         document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
         if(page === 'home') {
             document.getElementById('homePage').classList.add('active');
             document.getElementById('btn-home').classList.add('active');
-            displayBooks(allBooks, 'homeBookGrid');
         } else {
             document.getElementById('newBooksPage').classList.add('active');
             document.getElementById('btn-new').classList.add('active');
@@ -280,25 +264,20 @@
         }
     }
 
-    function filterBooks(cat){
-        const filtered = allBooks.filter(b => b.category === cat);
-        displayBooks(filtered, 'homeBookGrid');
+    function toggleCart(){
+        const drawer = document.getElementById('cartDrawer');
+        const overlay = document.getElementById('cartOverlay');
+        const isOpen = drawer.classList.contains('open');
+        
+        if(!isOpen) renderCartItems(); // ড্রয়ার খোলার সময় লিস্ট আপডেট করবে
+
+        drawer.classList.toggle('open');
+        overlay.style.display = !isOpen ? 'block' : 'none';
     }
 
     function toggleMenu(){
         document.getElementById('menuDrawer').classList.toggle('open');
         document.getElementById('menuOverlay').style.display = document.getElementById('menuDrawer').classList.contains('open') ? 'block' : 'none';
-    }
-
-    function toggleCart(){
-        document.getElementById('cartDrawer').classList.toggle('open');
-        document.getElementById('cartOverlay').style.display = document.getElementById('cartDrawer').classList.contains('open') ? 'block' : 'none';
-    }
-
-    function searchBooks(){
-        const text = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allBooks.filter(b => b.title.toLowerCase().includes(text));
-        displayBooks(filtered, 'homeBookGrid');
     }
 
     window.onload = loadBooks;
