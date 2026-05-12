@@ -25,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* হেডার */
         header{
             background:var(--white);
             padding:12px 15px;
@@ -33,14 +32,9 @@
             top:0;
             z-index:1000;
             box-shadow:0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .nav-top{
-            display:flex;
-            align-items:center;
-            gap:12px;
-            max-width:800px;
-            margin:0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo{
@@ -49,25 +43,15 @@
         }
 
         /* সেকশন কন্ট্রোল */
-        .page-section {
-            display: none; /* সব সেকশন শুরুতে লুকানো */
-            animation: fadeIn 0.4s ease;
-        }
+        .page-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .page-section.active { display: block; }
 
-        .page-section.active {
-            display: block; /* শুধুমাত্র একটি সেকশন দৃশ্যমান থাকবে */
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* স্লাইডার */
         .slider-container{
             margin:15px; height:180px; position:relative;
             overflow:hidden; border-radius:15px;
-            box-shadow:0 4px 15px rgba(0,0,0,0.1);
         }
         .slide{
             position:absolute; width:100%; height:100%; opacity:0;
@@ -80,117 +64,111 @@
 
         /* নতুন বইয়ের ব্যানার */
         .new-arrival-banner {
-            width: 100%; height: 180px;
-            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1000') center/cover;
-            position: relative; margin-bottom: 20px;
+            width: 100%; height: 200px;
+            background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1000') center/cover;
+            position: relative;
         }
         .banner-overlay {
             position: absolute; inset: 0;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7));
-            display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 20px; color: white;
+            background: rgba(0,0,0,0.6);
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; color: white;
         }
 
-        /* ক্যাটাগরি */
-        .category-wrapper { padding: 10px 15px; background: #fff; margin-bottom: 10px; }
-        .category-scroll { display: flex; overflow-x: auto; gap: 10px; }
-        .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-btn {
-            padding: 8px 18px; border-radius: 20px; border: 1px solid #ddd;
-            background: #fff; font-family: 'Hind Siliguri'; font-weight: 600;
-            white-space: nowrap; cursor: pointer;
-        }
-        .cat-btn.active { background: var(--primary-blue); color: #fff; }
-
-        /* বুক গ্রিড */
+        /* বুক গ্রিড (সাজানো ইমেজ স্টাইল) */
         .book-grid{
             display:grid; grid-template-columns:repeat(2,1fr);
             gap:15px; padding:15px;
         }
         .book-card{
-            background:var(--white); border-radius:15px;
-            overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.05);
-            border:1px solid #f0f0f0;
+            background:var(--white); border-radius:12px;
+            overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06);
+            border:1px solid #eee; display: flex; flex-direction: column;
         }
-        .book-card img{ width:100%; height:170px; object-fit:cover; }
-        .book-info{ padding:12px; }
-        .price{ color:var(--accent-orange); font-weight:800; }
+        .book-card img{ width:100%; height:190px; object-fit:cover; display: block; }
+        .book-info{ padding:10px; flex-grow: 1; }
+        .book-info h4{ font-size:14px; color: var(--primary-blue); margin-bottom: 5px; height: 38px; overflow: hidden; }
+        .price{ color:var(--accent-orange); font-weight:700; font-size: 15px; }
         .cart-btn{
             width:100%; background:var(--primary-blue); color:white;
-            border:none; padding:10px; border-radius:10px;
-            font-family:'Hind Siliguri'; font-weight:600; cursor:pointer;
+            border:none; padding:8px; border-radius:6px; margin-top: 8px;
+            font-family:'Hind Siliguri'; cursor:pointer; font-size: 13px;
         }
 
         /* বটম নেভিগেশন */
         .bottom-nav{
             position:fixed; bottom:0; width:100%;
             background:var(--white); display:flex;
-            justify-content:space-around; padding:12px 0;
+            justify-content:space-around; padding:10px 0;
             border-top:1px solid #eee; z-index:1001;
         }
         .nav-btn{
             background:none; border:none; color:#b2bec3;
-            font-family:'Hind Siliguri'; font-size:11px;
-            text-align:center; font-weight:600; cursor:pointer;
+            font-size:11px; text-align:center; font-weight:600; cursor:pointer;
         }
         .nav-btn.active{ color:var(--primary-blue); }
-        .nav-btn i{ font-size:20px; display:block; margin-bottom:4px; }
+        .nav-btn i{ font-size:20px; display:block; margin-bottom:3px; }
 
-        /* ড্রয়ার */
-        .menu-overlay{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:2000; }
-        .menu-drawer{ position:fixed; bottom:-100%; left:0; width:100%; background:var(--white); border-radius:20px 20px 0 0; padding:20px; transition:0.4s; z-index:2001; }
-        .menu-drawer.open{ bottom:0; }
-        .menu-item-link {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
-            text-decoration: none; color: var(--primary-blue);
-            font-weight: 600; background: #f8f9fa; border-radius: 12px; margin-bottom: 10px;
+        /* ড্রয়ার মেনু স্টাইল */
+        .drawer-overlay{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:2000; }
+        .drawer{
+            position:fixed; top:0; right:-280px; width:280px; height:100%;
+            background:var(--white); transition:0.3s; z-index:2001;
+            padding:20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        }
+        .drawer.open{ right:0; }
+        .drawer-item {
+            display: flex; align-items: center; gap: 12px; padding: 15px 0;
+            text-decoration: none; color: #444; border-bottom: 1px solid #f0f0f0;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="nav-top">
-        <a href="#" class="logo" onclick="navigateTo('home')">
-            <i class="fa fa-book-open"></i> MY<span style="color:var(--accent-orange)">GRAM</span>
-        </a>
-        <div style="flex:1"></div>
-        <i class="fa fa-search" style="font-size: 20px; color: var(--primary-blue);"></i>
-    </div>
+    <a href="#" class="logo" onclick="navigateTo('home')">
+        <i class="fa fa-book-open"></i> MY<span style="color:var(--accent-orange)">GRAM</span>
+    </a>
+    <i class="fa fa-bars" onclick="toggleDrawer()" style="font-size: 22px; color: var(--primary-blue); cursor: pointer;"></i>
 </header>
 
 <div id="home-section" class="page-section active">
-    <div class="slider-container">
+    <div class="slider-container" id="mainSlider">
         <div class="slide active" style="background-image:url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1000');">
-            <div class="slide-overlay"><h2>বইয়ের মেলা ২০২৬</h2><p>সেরা অফারে প্রিয় বই কিনুন</p></div>
+            <div class="slide-overlay"><h2>বইয়ের মেলা</h2><p>আপনার প্রিয় লেখক এখানে</p></div>
         </div>
-        <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1000');">
-            <div class="slide-overlay"><h2>নতুন কালেকশন</h2><p>সব বিভাগে নতুন বই এসেছে</p></div>
-        </div>
-    </div>
-
-    <div class="category-wrapper">
-        <div class="category-scroll">
-            <button class="cat-btn active" onclick="filterBooks('all', this)">সব বই</button>
-            <button class="cat-btn" onclick="filterBooks('বিজ্ঞান', this)">বিজ্ঞান</button>
-            <button class="cat-btn" onclick="filterBooks('গল্প', this)">গল্প</button>
-            <button class="cat-btn" onclick="filterBooks('ইতিহাস', this)">ইতিহাস</button>
+        <div class="slide" style="background-image:url('https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1000');">
+            <div class="slide-overlay"><h2>সেরা কালেকশন</h2><p>সব বইয়ে বিশেষ ছাড়</p></div>
         </div>
     </div>
-
+    
+    <div style="padding: 0 15px;"><h3 style="color: var(--primary-blue); border-left: 4px solid var(--accent-orange); padding-left: 10px;">জনপ্রিয় বই</h3></div>
     <div class="book-grid" id="homeBookGrid"></div>
 </div>
 
 <div id="new-books-section" class="page-section">
     <div class="new-arrival-banner">
         <div class="banner-overlay">
-            <h1 style="font-size: 24px;">নিউ অ্যারাইভালস</h1>
-            <p style="font-size: 14px;">আমাদের লাইব্রেরিতে যুক্ত হওয়া সর্বশেষ বইগুলো</p>
+            <h1 style="margin: 0;">নতুন কালেকশন</h1>
+            <p>সদ্য যুক্ত হওয়া বইগুলো দেখুন</p>
         </div>
     </div>
-    
-    <h3 style="padding: 0 15px; margin-bottom: 5px;">সদ্য প্রকাশিত বই</h3>
+    <div style="padding: 15px 15px 0;"><h3 style="color: var(--primary-blue);">সব নতুন বই</h3></div>
     <div class="book-grid" id="newArrivalGrid"></div>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<div class="drawer" id="sideDrawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="color: var(--primary-blue);">বুক শপ</h2>
+        <i class="fa fa-times" onclick="toggleDrawer()" style="font-size: 24px; cursor: pointer;"></i>
+    </div>
+    <a href="#" class="drawer-item"><i class="fa fa-user"></i> আমার প্রোফাইল</a>
+    <a href="#" class="drawer-item"><i class="fa fa-info-circle"></i> আমাদের সম্পর্কে</a>
+    <a href="#" class="drawer-item"><i class="fa fa-shield-halved"></i> গোপনীয়তা নীতি</a>
+    <a href="#" class="drawer-item"><i class="fa fa-file-contract"></i> শর্তাবলী</a>
+    <a href="#" class="drawer-item"><i class="fa fa-headset"></i> কাস্টমার সাপোর্ট</a>
 </div>
 
 <nav class="bottom-nav">
@@ -198,87 +176,74 @@
         <i class="fa-solid fa-house"></i>হোম
     </button>
     <button class="nav-btn" id="btn-new" onclick="navigateTo('new-books')">
-        <i class="fa-solid fa-fire"></i>নতুন বই
+        <i class="fa-solid fa-bolt"></i>নতুন বই
     </button>
-    <button class="nav-btn" onclick="toggleMenu()">
-        <i class="fa-solid fa-bars"></i>মেনু
+    <button class="nav-btn">
+        <i class="fa-solid fa-magnifying-glass"></i>সার্চ
+    </button>
+    <button class="nav-btn">
+        <i class="fa-solid fa-cart-shopping"></i>কার্ট
+    </button>
+    <button class="nav-btn" onclick="toggleDrawer()">
+        <i class="fa-solid fa-circle-user"></i>অ্যাকাউন্ট
     </button>
 </nav>
 
-<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-<div class="menu-drawer" id="menuDrawer">
-    <h3 style="margin-bottom: 20px;">মেনু</h3>
-    <a href="javascript:void(0)" onclick="navigateTo('home'); toggleMenu()" class="menu-item-link">
-        <i class="fa-solid fa-house"></i> হোম পেজ
-    </a>
-    <a href="javascript:void(0)" onclick="navigateTo('new-books'); toggleMenu()" class="menu-item-link">
-        <i class="fa-solid fa-star"></i> নতুন সংগৃহীত বই
-    </a>
-</div>
-
 <script>
-    // ডামি বইয়ের ডেটা (আপনার লোকাল স্টোরেজ থেকে আসবে)
-    let allBooks = JSON.parse(localStorage.getItem('myBooks')) || [];
+    // ডামি বই ডেটা
+    let allBooks = JSON.parse(localStorage.getItem('myBooks')) || [
+        {id:1, title: 'হিমুর হাতে কয়েকটি নীলপদ্ম', price: 250, category: 'গল্প', img: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1000'},
+        {id:2, title: 'প্যারাডক্সিক্যাল সাজিদ', price: 320, category: 'বিজ্ঞান', img: 'https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=1000'}
+    ];
 
-    // ১. পেজ নেভিগেশন ফাংশন (কোনো রিফ্রেশ হবে না)
+    // SPA নেভিগেশন (রিফ্রেশ ছাড়া)
     function navigateTo(sectionId) {
-        // সব সেকশন বন্ধ করা
         document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-        // সব বাটন ইন-অ্যাক্টিভ করা
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
         if(sectionId === 'home') {
             document.getElementById('home-section').classList.add('active');
             document.getElementById('btn-home').classList.add('active');
-            displayBooks(allBooks, 'homeBookGrid');
-        } 
-        else if(sectionId === 'new-books') {
+            renderBooks(allBooks, 'homeBookGrid');
+        } else if(sectionId === 'new-books') {
             document.getElementById('new-books-section').classList.add('active');
             document.getElementById('btn-new').classList.add('active');
-            // শেষ ৪টি বইকে নতুন বই হিসেবে দেখানো
-            const recentBooks = [...allBooks].reverse().slice(0, 4);
-            displayBooks(recentBooks, 'newArrivalGrid');
+            // নতুন বই হিসেবে উল্টো দিক থেকে দেখাচ্ছে
+            renderBooks([...allBooks].reverse(), 'newArrivalGrid');
         }
-        window.scrollTo(0, 0);
+        window.scrollTo(0,0);
     }
 
-    // ২. বই প্রদর্শনের ফাংশন
-    function displayBooks(books, containerId) {
+    // বই রেন্ডার করার ফাংশন
+    function renderBooks(books, containerId) {
         const container = document.getElementById(containerId);
         if(books.length === 0) {
-            container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:30px;">কোনো বই পাওয়া যায়নি।</p>';
+            container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px;">কোনো বই নেই!</p>';
             return;
         }
         container.innerHTML = books.map(book => `
             <div class="book-card">
-                <img src="${book.img}">
+                <img src="${book.img}" alt="${book.title}">
                 <div class="book-info">
-                    <h4 style="font-size:14px; height:40px; overflow:hidden;">${book.title}</h4>
+                    <h4>${book.title}</h4>
                     <p class="price">৳ ${book.price}</p>
-                    <button class="cart-btn">কার্টে যোগ করুন</button>
+                    <button class="cart-btn"><i class="fa fa-shopping-basket"></i> কিনুন</button>
                 </div>
             </div>
         `).join('');
     }
 
-    // ৩. ক্যাটাগরি ফিল্টার
-    function filterBooks(cat, btn) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filtered = cat === 'all' ? allBooks : allBooks.filter(b => b.category === cat);
-        displayBooks(filtered, 'homeBookGrid');
-    }
-
-    // ড্রয়ার কন্ট্রোল
-    function toggleMenu() {
-        document.getElementById('menuDrawer').classList.toggle('open');
-        const isOpen = document.getElementById('menuDrawer').classList.contains('open');
-        document.getElementById('menuOverlay').style.display = isOpen ? 'block' : 'none';
+    // সাইড ড্রয়ার কন্ট্রোল
+    function toggleDrawer() {
+        const drawer = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('drawerOverlay');
+        drawer.classList.toggle('open');
+        overlay.style.display = drawer.classList.contains('open') ? 'block' : 'none';
     }
 
     // অটো স্লাইডার
     let slideIdx = 0;
-    function startSlider() {
+    function runSlider() {
         const slides = document.querySelectorAll('.slide');
         if(slides.length === 0) return;
         setInterval(() => {
@@ -289,9 +254,9 @@
     }
 
     window.onload = () => {
-        displayBooks(allBooks, 'homeBookGrid');
-        startSlider();
-    };
+        renderBooks(allBooks, 'homeBookGrid');
+        runSlider();
+    }
 </script>
 
 </body>
