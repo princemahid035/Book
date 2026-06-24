@@ -91,6 +91,17 @@
             });
         }
     };
+    // কার্ট লজিক
+document.getElementById('add-to-cart-btn').onclick = function() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push(foundProduct);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // হোম পেজের কার্ট বাটন আপডেট করার জন্য সিগন্যাল পাঠানো
+    window.dispatchEvent(new Event('cartUpdated'));
+    
+    alert('Added to your bag!');
+};
 </script>
 </body>
 </html>
