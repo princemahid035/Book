@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KINO - Professional Admin Panel</title>
+    <title>KINO - Admin Panel Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --brand-purple: #5c46e4; --bg-light: #f8fafc; --text-dark: #0f172a; --border-soft: #e2e8f0; }
@@ -11,10 +11,10 @@
         .admin-container { max-width: 600px; margin: 0 auto; }
         .card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 20px; }
         input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border-soft); border-radius: 10px; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; margin-top: 10px; }
-        .btn-add { background: var(--brand-purple); color: white; }
+        .btn { padding: 10px 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; }
+        .btn-add { background: var(--brand-purple); color: white; width: 100%; }
         .prod-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
-        .prod-item img { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; }
+        .prod-item img { width: 50px; height: 50px; border-radius: 5px; object-fit: cover; }
     </style>
 </head>
 <body>
@@ -23,8 +23,9 @@
     <h2>KINO Admin Panel</h2>
 
     <div class="card">
-        <h3><i class="fa-solid fa-plus"></i> Add New Product</h3>
-        <form id="product-form" onsubmit="uploadProduct(event)">
+        <h3 id="form-title"><i class="fa-solid fa-plus"></i> Add New Product</h3>
+        <form id="product-form" onsubmit="saveProduct(event)">
+            <input type="hidden" id="edit-index" value="-1">
             <select id="prod-category" required>
                 <option value="vase">Home Decor (Vase)</option>
                 <option value="shirt">Full Sleeve Shirt</option>
@@ -32,8 +33,9 @@
             </select>
             <input type="text" id="prod-title" placeholder="Product Title" required>
             <input type="text" id="prod-price" placeholder="Price (e.g. Tk 1,350.00)" required>
+            <textarea id="prod-desc" placeholder="Product Description" required></textarea>
             <textarea id="prod-imgs" placeholder="Image URLs (Separated by comma ,)" required></textarea>
-            <button type="submit" class="btn btn-add">Add Product</button>
+            <button type="submit" class="btn btn-add" id="submit-btn">Add Product</button>
         </form>
     </div>
 
@@ -44,32 +46,63 @@
 </div>
 
 <script>
-    function uploadProduct(event) {
+    function saveProduct(event) {
         event.preventDefault();
+        const editIndex = document.getElementById('edit-index').value;
         const cat = document.getElementById('prod-category').value;
-        const title = document.getElementById('prod-title').value;
-        const price = document.getElementById('prod-price').value;
-        const imgString = document.getElementById('prod-imgs').value;
-        
-        // ইমেজগুলোকে এরেতে কনভার্ট করা
-        const images = imgString.split(',').map(url => url.trim());
-        
+        const product = {
+            title: document.getElementById('prod-title').value,
+            price: document.getElementById('prod-price').value,
+            desc: document.getElementById('prod-desc').value,
+            images: document.getElementById('prod-imgs').value.split(',').map(u => u.trim()),
+            img: document.getElementById('prod-imgs').value.split(',')[0].trim()
+        };
+
         let db = JSON.parse(localStorage.getItem('wordrobe_db')) || {};
         if(!db[cat]) db[cat] = [];
-        
-        db[cat].unshift({ title, price, img: images[0], images });
+
+        if(editIndex > -1) {
+            db[cat][editIndex] = product;
+        } else {
+            db[cat].unshift(product);
+        }
+
         localStorage.setItem('wordrobe_db', JSON.stringify(db));
-        
-        alert('Product added successfully!');
+        alert('Saved successfully!');
+        resetForm();
         renderProducts();
+    }
+
+    function editProd(cat, index) {
+        const db = JSON.parse(localStorage.getItem('wordrobe_db'));
+        const p = db[cat][index];
+        document.getElementById('edit-index').value = index;
+        document.getElementById('prod-category').value = cat;
+        document.getElementById('prod-title').value = p.title;
+        document.getElementById('prod-price').value = p.price;
+        document.getElementById('prod-desc').value = p.desc || "";
+        document.getElementById('prod-imgs').value = p.images ? p.images.join(', ') : p.img;
+        document.getElementById('submit-btn').innerText = "Update Product";
+    }
+
+    function deleteProd(cat, index) {
+        if(!confirm('Are you sure?')) return;
+        let db = JSON.parse(localStorage.getItem('wordrobe_db'));
+        db[cat].splice(index, 1);
+        localStorage.setItem('wordrobe_db', JSON.stringify(db));
+        renderProducts();
+    }
+
+    function resetForm() {
         document.getElementById('product-form').reset();
+        document.getElementById('edit-index').value = -1;
+        document.getElementById('submit-btn').innerText = "Add Product";
     }
 
     function renderProducts() {
         const db = JSON.parse(localStorage.getItem('wordrobe_db')) || {};
         const container = document.getElementById('product-list-container');
         container.innerHTML = "";
-        
         Object.keys(db).forEach(cat => {
             container.innerHTML += `<h4>${cat.toUpperCase()}</h4>`;
             db[cat].forEach((p, index) => {
@@ -77,18 +110,12 @@
                     <div class="prod-item">
                         <img src="${p.img}">
                         <div style="flex:1;"><b>${p.title}</b><br><small>${p.price}</small></div>
-                        <button onclick="deleteProd('${cat}', ${index})" style="color:red; border:none; background:none;"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editProd('${cat}', ${index})" class="btn"><i class="fa-solid fa-edit"></i></button>
+                        <button onclick="deleteProd('${cat}', ${index})" class="btn" style="color:red;"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
             });
         });
-    }
-
-    function deleteProd(cat, index) {
-        let db = JSON.parse(localStorage.getItem('wordrobe_db'));
-        db[cat].splice(index, 1);
-        localStorage.setItem('wordrobe_db', JSON.stringify(db));
-        renderProducts();
     }
 
     window.onload = renderProducts;
