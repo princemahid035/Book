@@ -279,6 +279,18 @@ window.addEventListener('storage', (event) => {
         updateCartUI();
     }
 });
+        document.getElementById('add-to-cart-btn').onclick = function() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push(foundProduct);
+    
+    // ডাটা সেভ করা
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // একটি কাস্টম ইভেন্ট তৈরি করা যাতে একই পেজে থাকলে আপডেট হয়
+    window.dispatchEvent(new Event('storage')); 
+    
+    alert('🛍️ "' + foundProduct.title + '" সফলভাবে ব্যাগে যোগ হয়েছে!');
+};
     </script>
 </body>
 </html>
