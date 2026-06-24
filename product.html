@@ -13,6 +13,7 @@
         .gallery-container { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 15px; scroll-snap-type: x mandatory; }
         .gallery-container img { min-width: 100%; height: 320px; object-fit: cover; border-radius: 20px; scroll-snap-align: center; background-color: #f1f5f9; }
         .section-box { padding: 0 20px 20px 20px; }
+        .review-card { background: white; padding: 15px; border-radius: 15px; margin-top: 10px; border: 1px solid #f1f5f9; color: var(--text-slate); font-style: italic; }
         .footer-btns { position: fixed; bottom: 0; width: 100%; display: flex; gap: 8px; padding: 10px 15px; background: white; border-top: 1px solid #eee; box-sizing: border-box; }
         .btn { flex: 1; padding: 14px 5px; border-radius: 12px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; }
         .btn-cart { background: #e0e7ff; color: var(--brand-purple); }
@@ -24,11 +25,18 @@
 <div class="nav-bar">
     <i class="fa-solid fa-arrow-left" onclick="history.back()"></i> 
     <b style="font-size:16px;">Product Details</b>
-    <i class="fa-solid fa-bag-shopping" onclick="location.href='cart.html'"></i>
+    <i class="fa-solid fa-bag-shopping"></i>
 </div>
 
 <div id="product-details-content">
     <p style="text-align:center; margin-top:50px;">Loading product...</p>
+</div>
+
+<div class="section-box">
+    <h3>Customer Reviews</h3>
+    <div class="review-card">
+        <i class="fa-solid fa-clock"></i> Review section is coming soon!
+    </div>
 </div>
 
 <div class="section-box">
@@ -57,7 +65,6 @@
         });
 
         if (foundProduct) {
-            // গ্যালারি ইমেজ জেনারেশন
             let imagesHTML = (foundProduct.images && foundProduct.images.length > 0) 
                 ? foundProduct.images.map(img => `<img src="${img.trim()}">`).join('')
                 : `<img src="${foundProduct.img}">`;
@@ -76,7 +83,10 @@
                 let cart = JSON.parse(localStorage.getItem('cart')) || [];
                 cart.push(foundProduct);
                 localStorage.setItem('cart', JSON.stringify(cart));
-                alert('Added to your bag!');
+                
+                // হোম পেজে সিগন্যাল পাঠানোর জন্য
+                window.dispatchEvent(new Event('cartUpdated'));
+                alert('🛍️ "' + foundProduct.title + '" added to your bag!');
             };
 
             // সাজেশন সেকশন
@@ -89,19 +99,10 @@
                     </div>
                 `;
             });
+        } else {
+            document.getElementById('product-details-content').innerHTML = `<p style="text-align:center;">Product not found!</p>`;
         }
     };
-    // কার্ট লজিক
-document.getElementById('add-to-cart-btn').onclick = function() {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.push(foundProduct);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    
-    // হোম পেজের কার্ট বাটন আপডেট করার জন্য সিগন্যাল পাঠানো
-    window.dispatchEvent(new Event('cartUpdated'));
-    
-    alert('Added to your bag!');
-};
 </script>
 </body>
 </html>
