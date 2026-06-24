@@ -8,20 +8,13 @@
     <style>
         :root { --brand-purple: #5c46e4; --bg-light: #f8fafc; --text-dark: #0f172a; --text-slate: #475569; }
         body { font-family: -apple-system, sans-serif; background-color: var(--bg-light); color: var(--text-dark); margin: 0; padding-bottom: 90px; }
-        
         .nav-bar { padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; background: white; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
-        
         .product-hero { background: white; padding: 20px; border-radius: 0 0 30px 30px; margin-bottom: 15px; }
         .gallery-container { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 15px; scroll-snap-type: x mandatory; }
         .gallery-container img { min-width: 100%; height: 320px; object-fit: cover; border-radius: 20px; scroll-snap-align: center; background-color: #f1f5f9; }
-        
         .section-box { padding: 0 20px 20px 20px; }
-        .review-placeholder { background: white; padding: 20px; border-radius: 15px; text-align: center; color: var(--text-slate); font-weight: 600; border: 1px dashed var(--brand-purple); }
-        
-        .suggestion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
         .footer-btns { position: fixed; bottom: 0; width: 100%; display: flex; gap: 8px; padding: 10px 15px; background: white; border-top: 1px solid #eee; box-sizing: border-box; }
-        .btn { flex: 1; padding: 14px 5px; border-radius: 12px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; white-space: nowrap; }
+        .btn { flex: 1; padding: 14px 5px; border-radius: 12px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; }
         .btn-cart { background: #e0e7ff; color: var(--brand-purple); }
         .btn-buy { background: var(--brand-purple); color: white; }
     </style>
@@ -31,7 +24,7 @@
 <div class="nav-bar">
     <i class="fa-solid fa-arrow-left" onclick="history.back()"></i> 
     <b style="font-size:16px;">Product Details</b>
-    <i class="fa-solid fa-bag-shopping" onclick="location.href='index.html'"></i>
+    <i class="fa-solid fa-bag-shopping" onclick="location.href='cart.html'"></i>
 </div>
 
 <div id="product-details-content">
@@ -39,25 +32,20 @@
 </div>
 
 <div class="section-box">
-    <h3>Customer Reviews</h3>
-    <div class="review-placeholder"><i class="fa-solid fa-star"></i> Reviews Coming Soon!</div>
-</div>
-
-<div class="section-box">
     <h3>Related Products</h3>
-    <div class="suggestion-grid" id="suggestion-list"></div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" id="suggestion-list"></div>
 </div>
 
 <div class="footer-btns">
-    <button class="btn btn-cart" onclick="alert('Added to your bag!')">Add to Cart</button>
-    <button class="btn btn-buy" onclick="alert('Redirecting to checkout...')">Checkout Now</button>
+    <button class="btn btn-cart" id="add-to-cart-btn">Add to Cart</button>
+    <button class="btn btn-buy" onclick="location.href='checkout.html'">Checkout Now</button>
 </div>
 
 <script>
     window.onload = function() {
         const params = new URLSearchParams(window.location.search);
         const pName = params.get('name');
-        const db = JSON.parse(localStorage.getItem('wordrobe_db'));
+        const db = JSON.parse(localStorage.getItem('wordrobe_db')) || {};
         
         let foundProduct = null;
         let allProducts = [];
@@ -70,8 +58,8 @@
 
         if (foundProduct) {
             // গ্যালারি ইমেজ জেনারেশন
-            let imagesHTML = foundProduct.images && foundProduct.images.length > 0 
-                ? foundProduct.images.map(img => `<img src="${img}">`).join('')
+            let imagesHTML = (foundProduct.images && foundProduct.images.length > 0) 
+                ? foundProduct.images.map(img => `<img src="${img.trim()}">`).join('')
                 : `<img src="${foundProduct.img}">`;
 
             document.getElementById('product-details-content').innerHTML = `
@@ -79,9 +67,17 @@
                     <div class="gallery-container">${imagesHTML}</div>
                     <h1>${foundProduct.title}</h1>
                     <p style="font-size: 22px; color: var(--brand-purple); font-weight: 800;">${foundProduct.price}</p>
-                    <p style="color: var(--text-slate); line-height: 1.5;">Premium quality design, perfectly crafted for your needs.</p>
+                    <p style="color: var(--text-slate); line-height: 1.6; font-size: 15px;">${foundProduct.desc || "No description available."}</p>
                 </div>
             `;
+
+            // কার্ট লজিক
+            document.getElementById('add-to-cart-btn').onclick = function() {
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                cart.push(foundProduct);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                alert('Added to your bag!');
+            };
 
             // সাজেশন সেকশন
             const sugList = document.getElementById('suggestion-list');
@@ -89,7 +85,7 @@
                 sugList.innerHTML += `
                     <div style="background:white; padding:10px; border-radius:15px;" onclick="location.href='product.html?name=${encodeURIComponent(p.title)}'">
                         <img src="${p.img}" style="width:100%; height:120px; object-fit:cover; border-radius:10px;">
-                        <p style="font-size:12px; font-weight:600; margin:10px 0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">${p.title}</p>
+                        <p style="font-size:12px; font-weight:600; margin:10px 0;">${p.title}</p>
                     </div>
                 `;
             });
