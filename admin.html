@@ -3,292 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KINO - এডমিন কন্ট্রোল প্যানেল</title>
+    <title>KINO - Professional Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --brand-purple: #5c46e4;
-            --brand-purple-dark: #4a35c9;
-            --bg-pure: #ffffff;
-            --bg-light: #f8fafc;
-            --text-dark: #0f172a;
-            --text-slate: #475569;
-            --border-soft: #e2e8f0;
-            --premium-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            padding: 20px;
-        }
-
-        .admin-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 15px;
-            background: var(--bg-pure);
-            border-radius: 16px;
-            box-shadow: var(--premium-shadow);
-        }
-
-        header h1 {
-            font-size: 22px;
-            color: var(--brand-purple);
-            text-transform: uppercase;
-            font-weight: 900;
-        }
-
-        header p {
-            font-size: 12px;
-            color: var(--text-slate);
-            margin-top: 4px;
-        }
-
-        .card {
-            background: var(--bg-pure);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: var(--premium-shadow);
-            border: 1px solid var(--border-soft);
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-dark);
-            border-bottom: 1px solid var(--border-soft);
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-slate);
-            margin-bottom: 6px;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-soft);
-            border-radius: 10px;
-            font-size: 13px;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            outline: none;
-            transition: border 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--brand-purple);
-            background-color: var(--bg-pure);
-        }
-
-        .btn-submit {
-            width: 100%;
-            background: var(--brand-purple);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
-        }
-
-        .btn-submit:hover {
-            background: var(--brand-purple-dark);
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            margin-top: 10px;
-        }
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-
-        .status-alert {
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            margin-top: 10px;
-            display: none;
-            text-align: center;
-        }
-        .success { background-color: #dcfce7; color: #15803d; }
+        :root { --brand-purple: #5c46e4; --bg-light: #f8fafc; --text-dark: #0f172a; --border-soft: #e2e8f0; }
+        body { font-family: sans-serif; background-color: var(--bg-light); padding: 20px; }
+        .admin-container { max-width: 600px; margin: 0 auto; }
+        .card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border-soft); border-radius: 10px; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; margin-top: 10px; }
+        .btn-add { background: var(--brand-purple); color: white; }
+        .prod-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
+        .prod-item img { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; }
     </style>
 </head>
 <body>
 
-    <div class="admin-container">
-        <header>
-            <h1>KINO Admin Panel</h1>
-            <p>লাইভ স্টোর ডাটাবেজ ও নোটিফিকেশন ম্যানেজার</p>
-        </header>
+<div class="admin-container">
+    <h2>KINO Admin Panel</h2>
 
-        <div class="card">
-            <div class="card-title">
-                <i class="fa-solid fa-bell" style="color: #eab308;"></i> কাস্টমারদের জন্য নোটিফিকেশন পাঠান
-            </div>
-            <form id="notification-form" onsubmit="pushNotification(event)">
-                <div class="form-group">
-                    <label for="notif-title">নোটিফিকেশন মেসেজ (বাংলা অথবা ইংরেজি)</label>
-                    <textarea id="notif-title" rows="2" placeholder="যেমন: ✨ আজ শার্টের উপর ২টা কিনলে ১টা ফ্রি অফার চলছে!" required></textarea>
-                </div>
-                <button type="submit" class="btn-submit">
-                    <i class="fa-solid fa-paper-plane"></i> নোটিফিকেশন লাইভ করুন
-                </button>
-            </form>
-            <div id="notif-status" class="status-alert success">📢 নোটিফিকেশন সফলভাবে কাস্টমার স্টোরে পাঠানো হয়েছে!</div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">
-                <i class="fa-solid fa-box-open" style="color: var(--brand-purple);"></i> নতুন প্রোডাক্ট যোগ করুন
-            </div>
-            <form id="product-form" onsubmit="uploadProduct(event)">
-                <div class="form-group">
-                    <label for="prod-category">ক্যাটাগরি সিলেক্ট করুন</label>
-                    <select id="prod-category" required>
-                        <option value="vase">Home Decor (Vase)</option>
-                        <option value="shirt">Full Sleeve Shirt</option>
-                        <option value="gadget">Smart Gadgets</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="prod-title">প্রোডাক্টের নাম (Title)</label>
-                    <input type="text" id="prod-title" placeholder="যেমন: Premium Luxury Slim Fit Shirt" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="prod-price">মূল্য (Price)</label>
-                    <input type="text" id="prod-price" placeholder="যেমন: Tk 1,350.00" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="prod-img">ইমেজ ইউআরএল (Image URL)</label>
-                    <input type="url" id="prod-img" placeholder="https://example.com/image.jpg" required>
-                </div>
-
-                <button type="submit" class="btn-submit">
-                    <i class="fa-solid fa-plus"></i> প্রোডাক্ট লাইভ করুন
-                </button>
-            </form>
-            <div id="product-status" class="status-alert success">🎉 প্রোডাক্টটি সফলভাবে যুক্ত হয়েছে এবং স্টোরে লাইভ হয়েছে!</div>
-        </div>
-
-        <div class="card">
-            <div class="card-title"><i class="fa-solid fa-gear"></i> ডাটাবেজ কন্ট্রোল</div>
-            <button class="btn-submit btn-danger" onclick="resetDatabase()">
-                <i class="fa-solid fa-trash-can"></i> সম্পূর্ণ ডাটাবেজ রিসেট করুন
-            </button>
-        </div>
+    <div class="card">
+        <h3><i class="fa-solid fa-plus"></i> Add New Product</h3>
+        <form id="product-form" onsubmit="uploadProduct(event)">
+            <select id="prod-category" required>
+                <option value="vase">Home Decor (Vase)</option>
+                <option value="shirt">Full Sleeve Shirt</option>
+                <option value="gadget">Smart Gadgets</option>
+            </select>
+            <input type="text" id="prod-title" placeholder="Product Title" required>
+            <input type="text" id="prod-price" placeholder="Price (e.g. Tk 1,350.00)" required>
+            <textarea id="prod-imgs" placeholder="Image URLs (Separated by comma ,)" required></textarea>
+            <button type="submit" class="btn btn-add">Add Product</button>
+        </form>
     </div>
 
-    <script>
-        // ডিফল্ট ডেমো প্রোডাক্ট স্ট্রাকচার 
-        const defaultProducts = {
-            vase: [{ title: "Handcrafted Ceramic Vase", price: "Tk 1,600.00", img: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=300&auto=format&fit=crop&q=80" }],
-            shirt: [{ title: "Full Sleeve Shirt | Bluven", price: "Tk 1,350.00", img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&auto=format&fit=crop&q=80" }],
-            gadget: [{ title: "Minimal Smart Watch Series 9", price: "Tk 3,400.00", img: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=300&auto=format&fit=crop&q=80" }]
-        };
+    <div class="card">
+        <h3><i class="fa-solid fa-list"></i> Product Inventory</h3>
+        <div id="product-list-container"></div>
+    </div>
+</div>
 
-        // ১. নোটিফিকেশন পুশ করার মূল লজিক (কাস্টমার স্টোরের সাথে কানেক্টেড)
-        function pushNotification(event) {
-            event.preventDefault();
-            const notifText = document.getElementById('notif-title').value;
+<script>
+    function uploadProduct(event) {
+        event.preventDefault();
+        const cat = document.getElementById('prod-category').value;
+        const title = document.getElementById('prod-title').value;
+        const price = document.getElementById('prod-price').value;
+        const imgString = document.getElementById('prod-imgs').value;
+        
+        // ইমেজগুলোকে এরেতে কনভার্ট করা
+        const images = imgString.split(',').map(url => url.trim());
+        
+        let db = JSON.parse(localStorage.getItem('wordrobe_db')) || {};
+        if(!db[cat]) db[cat] = [];
+        
+        db[cat].unshift({ title, price, img: images[0], images });
+        localStorage.setItem('wordrobe_db', JSON.stringify(db));
+        
+        alert('Product added successfully!');
+        renderProducts();
+        document.getElementById('product-form').reset();
+    }
 
-            // এডমিন একাউন্ট অবজেক্টের নাম আপডেট করে নোটিফিকেশন টেক্সট সেভ করা
-            const adminData = {
-                name: "KINO",
-                customNotif: notifText
-            };
+    function renderProducts() {
+        const db = JSON.parse(localStorage.getItem('wordrobe_db')) || {};
+        const container = document.getElementById('product-list-container');
+        container.innerHTML = "";
+        
+        Object.keys(db).forEach(cat => {
+            container.innerHTML += `<h4>${cat.toUpperCase()}</h4>`;
+            db[cat].forEach((p, index) => {
+                container.innerHTML += `
+                    <div class="prod-item">
+                        <img src="${p.img}">
+                        <div style="flex:1;"><b>${p.title}</b><br><small>${p.price}</small></div>
+                        <button onclick="deleteProd('${cat}', ${index})" style="color:red; border:none; background:none;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        });
+    }
 
-            localStorage.setItem('wordrobe_admin_acc', JSON.stringify(adminData));
-            
-            // সফলতার অ্যালার্ট শো করা
-            const status = document.getElementById('notif-status');
-            status.style.display = 'block';
-            document.getElementById('notification-form').reset();
-            
-            setTimeout(() => { status.style.display = 'none'; }, 3000);
-        }
+    function deleteProd(cat, index) {
+        let db = JSON.parse(localStorage.getItem('wordrobe_db'));
+        db[cat].splice(index, 1);
+        localStorage.setItem('wordrobe_db', JSON.stringify(db));
+        renderProducts();
+    }
 
-        // ২. নতুন প্রোডাক্ট আপলোড করার লজিক
-        function uploadProduct(event) {
-            event.preventDefault();
-            
-            const category = document.getElementById('prod-category').value;
-            const title = document.getElementById('prod-title').value;
-            const price = document.getElementById('prod-price').value;
-            const img = document.getElementById('prod-img').value;
-
-            // বর্তমান ডাটাবেজ লোকালস্টোরেজ থেকে রিড করা
-            let currentDB = JSON.parse(localStorage.getItem('wordrobe_db')) || defaultProducts;
-
-            // নতুন প্রোডাক্ট অ্যারেতে পুশ করা
-            if(!currentDB[category]) {
-                currentDB[category] = [];
-            }
-            
-            currentDB[category].unshift({ title, price, img });
-
-            // ডাটাবেজ পুনরায় লোকালস্টোরেজে সেভ করা
-            localStorage.setItem('wordrobe_db', JSON.stringify(currentDB));
-
-            // সফলতার অ্যালার্ট শো করা
-            const status = document.getElementById('product-status');
-            status.style.display = 'block';
-            document.getElementById('product-form').reset();
-
-            setTimeout(() => { status.style.display = 'none'; }, 3000);
-        }
-
-        // ৩. ডাটাবেজ রিসেট মেকানিজম
-        function resetDatabase() {
-            if(confirm('আপনি কি নিশ্চিত যে সম্পূর্ণ ডাটাবেজ রিসেট করে ডিফল্ট ডেটায় ফিরে যেতে চান?')) {
-                localStorage.setItem('wordrobe_db', JSON.stringify(defaultProducts));
-                localStorage.removeItem('wordrobe_admin_acc');
-                alert('🔄 ডাটাবেজ সফলভাবে রিসেট করা হয়েছে!');
-            }
-        }
-
-        // ইনিশিয়াল রান
-        window.onload = function() {
-            if (!localStorage.getItem('wordrobe_db')) {
-                localStorage.setItem('wordrobe_db', JSON.stringify(defaultProducts));
-            }
-        };
-    </script>
+    window.onload = renderProducts;
+</script>
 </body>
 </html>
