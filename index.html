@@ -22,7 +22,6 @@
         
         .premium-header { position: sticky; top: 0; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 90; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(241, 245, 249, 0.6); }
 
-        /* লোগো স্টাইল আপডেট করা হয়েছে */
         .logo-img { height: 35px; width: auto; object-fit: contain; }
 
         .header-right { display: flex; align-items: center; gap: 8px; }
@@ -52,7 +51,7 @@
 
         .products-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 0 24px; min-height: 150px; }
         
-        .product-luxury-card { background: var(--bg-pure); border-radius: 20px; padding: 14px; box-shadow: var(--premium-shadow); border: 1px solid rgba(241, 245, 249, 0.5); display: flex; flex-direction: column; }
+        .product-luxury-card { background: var(--bg-pure); border-radius: 20px; padding: 14px; box-shadow: var(--premium-shadow); border: 1px solid rgba(241, 245, 249, 0.5); display: flex; flex-direction: column; cursor: pointer; }
 
         .img-holder { width: 100%; height: 130px; background-size: cover; background-repeat: no-repeat; background-position: center; margin-bottom: 14px; border-radius: 12px; background-color: #f1f5f9; }
         .prod-info-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; color: var(--text-dark); }
@@ -79,8 +78,7 @@
         
         .drawer-top { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
         .drawer-content { padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; }
-        .cart-items-wrapper { flex: 1; overflow-y: auto; }
-
+        
         .cart-item { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-soft); }
         .cart-item-img { width: 50px; height: 50px; border-radius: 8px; background-size: cover; background-position: center; }
         .cart-item-info { flex: 1; }
@@ -95,22 +93,14 @@
 <body>
 
     <header class="premium-header">
-        <!-- লোগো এখানে বসানো হয়েছে -->
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhNBY-u3oAGmiUweoU4TZkftWin7Fh5M3z4UWBE6D7n7cZYjDcoxn-s672Z5hRLCT6FAKRFpA6G4onC30UnzYhKzjDKL2V_Nif44dZ2VWWSt7KFE9JfTsY3o-yFu-Lc-2fgu7Sf0md23b6RbeCDvOVzqbudlFhxIdGiP1fv2vFO1GX1sRtkZsdd4sG8eh-X/s864/1307.png" alt="Logo" class="logo-img">
-        
         <div class="header-right">
             <input type="text" id="header-search-input" class="search-input" placeholder="Search..." onkeyup="handleRealTimeSearch(event)">
-            <div class="circle-btn" onclick="toggleSearchBox()">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
-            <div class="circle-btn" onclick="openCartDrawer()">
-                <i class="fa-solid fa-bag-shopping"></i>
-                <span class="badge-count" id="cart-badge-val">0</span>
-            </div>
+            <div class="circle-btn" onclick="toggleSearchBox()"><i class="fa-solid fa-magnifying-glass"></i></div>
+            <div class="circle-btn" onclick="openCartDrawer()"><i class="fa-solid fa-bag-shopping"></i><span class="badge-count" id="cart-badge-val">0</span></div>
         </div>
     </header>
 
-    <!-- বাকি অংশ অপরিবর্তিত -->
     <section class="hero-intro">
         <h1 id="welcome-title">Premium KINO Store</h1>
         <p>Explore elite handcrafted lifestyle collections.</p>
@@ -138,7 +128,7 @@
             <div class="delivery-avatar"><i class="fa-solid fa-truck-fast"></i></div>
             <div>
                 <h4 style="font-size:14px;">Real-time tracking</h4>
-                <p style="font-size:11px; color:var(--text-slate);">Delivery Gay: Rabby Khan</p>
+                <p style="font-size:11px; color:var(--text-slate);">Delivery Man: Rabby Khan</p>
             </div>
         </div>
     </div>
@@ -185,153 +175,76 @@
         function toggleSearchBox() {
             const searchInput = document.getElementById('header-search-input');
             searchInput.classList.toggle('active-search');
-            if(searchInput.classList.contains('active-search')) {
-                searchInput.focus();
-            } else {
-                searchInput.value = '';
-                filterCategory('all', document.getElementById('default-chip'));
-            }
+            if(searchInput.classList.contains('active-search')) { searchInput.focus(); } else { searchInput.value = ''; filterCategory('all', document.getElementById('default-chip')); }
         }
 
         function handleRealTimeSearch(event) {
             const query = event.target.value.toLowerCase();
             const grid = document.getElementById('homepage-products-grid');
             grid.innerHTML = "";
-
             const liveData = JSON.parse(localStorage.getItem('wordrobe_db')) || defaultProducts;
             let productListToRender = [];
-
-            Object.keys(liveData).forEach(key => {
-                productListToRender = productListToRender.concat(liveData[key]);
-            });
-
+            Object.keys(liveData).forEach(key => { productListToRender = productListToRender.concat(liveData[key]); });
             const filtered = productListToRender.filter(p => p.title.toLowerCase().includes(query));
 
             filtered.forEach((p) => {
                 const card = document.createElement('div');
                 card.className = "product-luxury-card";
-                card.innerHTML = `
-                    <div class="img-holder" style="background-image: url('${p.img}');"></div>
-                    <div class="prod-info-title">${p.title}</div>
-                    <div class="prod-info-footer">
-                        <div class="prod-price">${p.price}</div>
-                        <button class="add-btn-purple" onclick="addToBag('${p.title.replace(/'/g, "\\'")}', '${p.price}', '${p.img}')"><i class="fa-solid fa-plus"></i></button>
-                    </div>
-                `;
+                card.onclick = function() { location.href = `product.html?name=${encodeURIComponent(p.title)}`; };
+                card.innerHTML = `<div class="img-holder" style="background-image: url('${p.img}');"></div><div class="prod-info-title">${p.title}</div><div class="prod-info-footer"><div class="prod-price">${p.price}</div><button class="add-btn-purple" onclick="event.stopPropagation(); addToBag('${p.title.replace(/'/g, "\\'")}', '${p.price}', '${p.img}')"><i class="fa-solid fa-plus"></i></button></div>`;
                 grid.appendChild(card);
             });
-
-            if(query !== '') {
-                document.querySelectorAll('.menu-chip').forEach(c => c.classList.remove('active'));
-            }
+            if(query !== '') { document.querySelectorAll('.menu-chip').forEach(c => c.classList.remove('active')); }
         }
 
-        function openCartDrawer() {
-            document.getElementById('drawer-cart-panel').classList.add('active-open');
-            document.getElementById('mask-overlay').style.display = 'block';
-        }
-
-        function closeAllDrawers() {
-            document.getElementById('drawer-cart-panel').classList.remove('active-open');
-            document.getElementById('mask-overlay').style.display = 'none';
-        }
+        function openCartDrawer() { document.getElementById('drawer-cart-panel').classList.add('active-open'); document.getElementById('mask-overlay').style.display = 'block'; }
+        function closeAllDrawers() { document.getElementById('drawer-cart-panel').classList.remove('active-open'); document.getElementById('mask-overlay').style.display = 'none'; }
 
         function filterCategory(catKey, element) {
             document.querySelectorAll('.menu-chip').forEach(c => c.classList.remove('active'));
             if(element) element.classList.add('active');
-
             const grid = document.getElementById('homepage-products-grid');
             if(!grid) return;
             grid.innerHTML = "";
-
             const liveData = JSON.parse(localStorage.getItem('wordrobe_db')) || defaultProducts;
-            let productListToRender = [];
-
-            if(catKey === 'all') {
-                Object.keys(liveData).forEach(key => {
-                    productListToRender = productListToRender.concat(liveData[key]);
-                });
-            } else {
-                productListToRender = liveData[catKey] || [];
-            }
+            let productListToRender = (catKey === 'all') ? [].concat(...Object.values(liveData)) : (liveData[catKey] || []);
 
             productListToRender.forEach((p) => {
                 const card = document.createElement('div');
                 card.className = "product-luxury-card";
-                card.innerHTML = `
-                    <div class="img-holder" style="background-image: url('${p.img}');"></div>
-                    <div class="prod-info-title">${p.title}</div>
-                    <div class="prod-info-footer">
-                        <div class="prod-price">${p.price}</div>
-                        <button class="add-btn-purple" onclick="addToBag('${p.title.replace(/'/g, "\\'")}', '${p.price}', '${p.img}')"><i class="fa-solid fa-plus"></i></button>
-                    </div>
-                `;
+                card.onclick = function() { location.href = `product.html?name=${encodeURIComponent(p.title)}`; };
+                card.innerHTML = `<div class="img-holder" style="background-image: url('${p.img}');"></div><div class="prod-info-title">${p.title}</div><div class="prod-info-footer"><div class="prod-price">${p.price}</div><button class="add-btn-purple" onclick="event.stopPropagation(); addToBag('${p.title.replace(/'/g, "\\'")}', '${p.price}', '${p.img}')"><i class="fa-solid fa-plus"></i></button></div>`;
                 grid.appendChild(card);
             });
         }
 
-        function addToBag(title, price, img) {
-            myCartArray.push({ title, price, img });
-            updateCartUI();
-            alert('🛍️ "' + title + '" সফলভাবে শপিং ব্যাগে যোগ হয়েছে!');
-        }
+        function addToBag(title, price, img) { myCartArray.push({ title, price, img }); updateCartUI(); alert('🛍️ "' + title + '" সফলভাবে শপিং ব্যাগে যোগ হয়েছে!'); }
 
         function updateCartUI() {
             document.getElementById('cart-badge-val').innerText = myCartArray.length;
             const cartList = document.getElementById('cart-container-list');
             const footerSection = document.getElementById('cart-footer-checkout-section');
-            
-            if(myCartArray.length === 0) {
-                cartList.innerHTML = `<p style="text-align:center; color:var(--text-slate); margin-top:40px;">Your bag is empty</p>`;
-                footerSection.style.display = "none";
-                return;
-            }
-
-            cartList.innerHTML = "";
-            footerSection.style.display = "block";
+            if(myCartArray.length === 0) { cartList.innerHTML = `<p style="text-align:center; color:var(--text-slate); margin-top:40px;">Your bag is empty</p>`; footerSection.style.display = "none"; return; }
+            cartList.innerHTML = ""; footerSection.style.display = "block";
             let totalPriceSum = 0;
-
             myCartArray.forEach((item, index) => {
                 let numericPrice = parseInt(item.price.replace(/[^0-9]/g, '')) || 0;
                 totalPriceSum += numericPrice;
-
                 const div = document.createElement('div');
                 div.className = "cart-item";
-                div.innerHTML = `
-                    <div class="cart-item-img" style="background-image:url('${item.img}')"></div>
-                    <div class="cart-item-info">
-                        <h5>${item.title}</h5>
-                        <p>${item.price}</p>
-                    </div>
-                    <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer;"><i class="fa-regular fa-trash-can"></i></button>
-                `;
+                div.innerHTML = `<div class="cart-item-img" style="background-image:url('${item.img}')"></div><div class="cart-item-info"><h5>${item.title}</h5><p>${item.price}</p></div><button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer;"><i class="fa-regular fa-trash-can"></i></button>`;
                 cartList.appendChild(div);
             });
             document.getElementById('cart-total-price-val').innerText = "Tk " + totalPriceSum.toLocaleString();
         }
 
-        function removeFromCart(index) {
-            myCartArray.splice(index, 1);
-            updateCartUI();
-        }
-
-        function proceedToCheckout() {
-            alert('🚀 Order Placed Successfully! Thank you for shopping with KINO.');
-            myCartArray = [];
-            updateCartUI();
-            closeAllDrawers();
-        }
+        function removeFromCart(index) { myCartArray.splice(index, 1); updateCartUI(); }
+        function proceedToCheckout() { alert('🚀 Order Placed Successfully! Thank you for shopping with KINO.'); myCartArray = []; updateCartUI(); closeAllDrawers(); }
 
         window.onload = function() {
-            if (!localStorage.getItem('wordrobe_db')) {
-                localStorage.setItem('wordrobe_db', JSON.stringify(defaultProducts));
-            }
-
+            if (!localStorage.getItem('wordrobe_db')) { localStorage.setItem('wordrobe_db', JSON.stringify(defaultProducts)); }
             const adminAcc = JSON.parse(localStorage.getItem('wordrobe_admin_acc'));
-            if(adminAcc && adminAcc.name) {
-                document.getElementById('welcome-title').innerHTML = `Welcome to<br>${adminAcc.name}'s Store`;
-            }
-
+            if(adminAcc && adminAcc.name) { document.getElementById('welcome-title').innerHTML = `Welcome to<br>${adminAcc.name}'s Store`; }
             initImageSlider();
             filterCategory('all', document.getElementById('default-chip'));
             updateCartUI();
