@@ -267,6 +267,11 @@
             filterCategory('all', document.getElementById('default-chip'));
             updateCartUI();
         };
+        // হোম পেজে কার্ট আপডেট লিসেনার
+window.addEventListener('cartUpdated', function() {
+    myCartArray = JSON.parse(localStorage.getItem('cart')) || [];
+    updateCartUI();
+});
     </script>
 </body>
 </html>
