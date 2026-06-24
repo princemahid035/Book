@@ -272,6 +272,13 @@ window.addEventListener('cartUpdated', function() {
     myCartArray = JSON.parse(localStorage.getItem('cart')) || [];
     updateCartUI();
 });
+        // localStorage এ পরিবর্তন হলে অটোমেটিক কার্ট আপডেট হবে
+window.addEventListener('storage', (event) => {
+    if (event.key === 'cart') {
+        myCartArray = JSON.parse(event.newValue) || [];
+        updateCartUI();
+    }
+});
     </script>
 </body>
 </html>
