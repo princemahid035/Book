@@ -3,165 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MYGRAM BOOKS | প্রিমিয়াম বুক শপ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>KINO - প্রিমিয়াম কাস্টমার স্টোর</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root{ --primary-blue:#1A374D; --accent-orange:#FF6B35; --soft-bg:#F8F9FA; --white:#ffffff; --text-dark: #2d3436; }
-        *{ margin:0; padding:0; box-sizing:border-box; }
-        body{ font-family:'Hind Siliguri',sans-serif; background-color:var(--soft-bg); padding-bottom:85px; overflow-x: hidden; }
+        :root {
+            --brand-purple: #5c46e4;
+            --bg-pure: #ffffff;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-slate: #475569;
+            --border-soft: #e2e8f0;
+            --premium-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+        }
 
-        /* Header & Search */
-        header{ background:var(--white); padding:12px 15px; position:sticky; top:0; z-index:1000; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
-        .nav-top{ display:flex; align-items:center; gap:12px; max-width:800px; margin:0 auto; }
-        .logo{ font-weight:700; font-size:20px; color:var(--primary-blue); text-decoration:none; }
-        .search-container{ flex:1; display:flex; background:#F1F3F4; border-radius:12px; padding:2px 5px; align-items:center; border:1px solid #E0E0E0; }
-        .search-container input{ border:none; padding:10px; background:transparent; width:100%; outline:none; font-family:'Hind Siliguri'; }
-        .search-btn{ background:var(--primary-blue); color:white; border:none; width:32px; height:32px; border-radius:8px; cursor:pointer; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-        /* Slider */
-        .slider-container{ margin:15px; height:160px; position:relative; overflow:hidden; border-radius:15px; }
-        .slide{ position:absolute; width:100%; height:100%; background: var(--primary-blue); display:flex; align-items:center; justify-content:center; color:white; text-align:center; }
-        .slide-overlay{ padding:20px; background: rgba(0,0,0,0.3); width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-light); color: var(--text-dark); overflow-x: hidden; padding-bottom: 90px; }
+        
+        .premium-header { position: sticky; top: 0; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 90; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(241, 245, 249, 0.6); }
 
-        /* Category */
-        .cat-section { padding: 15px; background: white; margin-bottom: 10px; }
-        .cat-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 5px; scrollbar-width: none; }
-        .cat-scroll::-webkit-scrollbar { display: none; }
-        .cat-item { text-align: center; min-width: 65px; cursor: pointer; }
-        .cat-icon { width: 50px; height: 50px; background: #f1f3f4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; color: var(--primary-blue); font-size: 18px; }
+        /* লোগো স্টাইল আপডেট করা হয়েছে */
+        .logo-img { height: 35px; width: auto; object-fit: contain; }
 
-        /* Book Grid */
-        .book-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; max-width: 800px; margin: 0 auto; }
-        .book-card { background: white; border-radius: 12px; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); text-align: center; }
-        .book-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; }
-        .book-card h4 { font-size: 14px; margin: 8px 0; height: 38px; overflow: hidden; color: var(--text-dark); }
-        .price { color: var(--accent-orange); font-weight: 700; display: block; margin-bottom: 8px; }
-        .add-btn { background: var(--primary-blue); color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-size: 13px; }
+        .header-right { display: flex; align-items: center; gap: 8px; }
+        
+        .search-input { width: 0; opacity: 0; border: none; padding: 0; transition: all 0.3s ease; height: 36px; border-radius: 20px; outline: none; font-size: 13px; background: #f1f5f9; color: var(--text-dark); }
+        .search-input.active-search { width: 140px; padding: 0 14px; opacity: 1; border: 1px solid var(--border-soft); }
 
-        /* Drawers */
-        .drawer-overlay{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; z-index:2000; }
-        .drawer{ position:fixed; bottom:-100%; left:0; width:100%; background:white; border-radius:20px 20px 0 0; padding:20px; transition:0.4s; z-index:2001; max-height:80vh; overflow-y:auto; }
-        .drawer.open{ bottom:0; }
-        .menu-link { display: flex; align-items: center; gap: 12px; padding: 15px; text-decoration: none; color: var(--text-dark); background: #f8f9fa; border-radius: 10px; margin-bottom: 10px; font-weight: 600; }
+        .circle-btn { background: var(--bg-pure); border: 1px solid #f1f5f9; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; position: relative; }
 
-        /* Bottom Nav */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000; }
-        .nav-btn { background: none; border: none; color: #888; text-align: center; cursor: pointer; position: relative; font-size: 12px; }
-        .nav-btn.active { color: var(--primary-blue); }
-        .nav-btn i { font-size: 20px; display: block; margin-bottom: 2px; }
-        #cart-badge { position: absolute; top: -5px; right: 2px; background: var(--accent-orange); color: white; font-size: 10px; padding: 2px 6px; border-radius: 50%; display: none; }
+        .badge-count { position: absolute; top: -2px; right: -2px; background: var(--brand-purple); color: white; font-size: 10px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; z-index: 5; }
+
+        .hero-intro { padding: 15px 24px 10px 24px; background: var(--bg-pure); }
+        .hero-intro h1 { font-size: 24px; font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 4px; }
+        .hero-intro p { font-size: 13px; color: var(--text-slate); }
+
+        .slider-section { padding: 5px 20px 15px 20px; background: var(--bg-pure); }
+        .slider-box { position: relative; height: 180px; border-radius: 20px; overflow: hidden; box-shadow: var(--premium-shadow); background: #e2e8f0; }
+        .premium-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 0.6s ease-in-out; }
+        .premium-slide.active { opacity: 1; z-index: 1; }
+
+        .section-title { font-size: 16px; font-weight: 700; padding: 20px 24px 12px 24px; }
+        
+        .horizontal-menu { display: flex; overflow-x: auto; gap: 12px; padding: 0 24px 20px 24px; }
+        .horizontal-menu::-webkit-scrollbar { display: none; }
+        .menu-chip { flex: 0 0 auto; padding: 10px 20px; background: var(--bg-pure); border-radius: 30px; font-size: 13px; font-weight: 600; color: var(--text-slate); border: 1px solid #f1f5f9; cursor: pointer; }
+        .menu-chip.active { background: var(--text-dark); color: white; }
+
+        .products-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 0 24px; min-height: 150px; }
+        
+        .product-luxury-card { background: var(--bg-pure); border-radius: 20px; padding: 14px; box-shadow: var(--premium-shadow); border: 1px solid rgba(241, 245, 249, 0.5); display: flex; flex-direction: column; }
+
+        .img-holder { width: 100%; height: 130px; background-size: cover; background-repeat: no-repeat; background-position: center; margin-bottom: 14px; border-radius: 12px; background-color: #f1f5f9; }
+        .prod-info-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; color: var(--text-dark); }
+        .prod-info-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .prod-price { font-size: 14px; font-weight: 700; color: var(--brand-purple); }
+        
+        .add-btn-purple { background: var(--brand-purple); border: none; width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .delivery-widget { background: var(--bg-pure); margin: 24px; padding: 18px; border-radius: 20px; box-shadow: var(--premium-shadow); border: 1px solid rgba(241, 245, 249, 0.6); }
+        .widget-flex { display: flex; gap: 14px; align-items: center; }
+        .delivery-avatar { width: 42px; height: 42px; background: #e0e7ff; color: var(--brand-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        .bottom-premium-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); height: 70px; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #f1f5f9; z-index: 90; }
+
+        .bar-link { display: flex; flex-direction: column; align-items: center; color: var(--text-slate); font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; }
+        .bar-link i { font-size: 18px; margin-bottom: 4px; }
+        .bar-link.active { color: var(--brand-purple); }
+
+        .drawer-blur-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); z-index: 500; display: none; }
+        .luxury-drawer { position: fixed; top: 0; width: 85%; max-width: 340px; height: 100%; background: var(--bg-pure); z-index: 501; transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.1); }
+        
+        #drawer-cart-panel { right: 0; transform: translateX(100%); }
+        .luxury-drawer.active-open { transform: translateX(0) !important; }
+        
+        .drawer-top { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+        .drawer-content { padding: 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; }
+        .cart-items-wrapper { flex: 1; overflow-y: auto; }
+
+        .cart-item { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-soft); }
+        .cart-item-img { width: 50px; height: 50px; border-radius: 8px; background-size: cover; background-position: center; }
+        .cart-item-info { flex: 1; }
+        .cart-item-info h5 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .cart-item-info p { font-size: 12px; color: var(--brand-purple); font-weight: 700; }
+
+        .cart-checkout-footer { border-top: 1px solid var(--border-soft); padding-top: 15px; margin-top: auto; background: var(--bg-pure); }
+        .total-price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-weight: 700; font-size: 15px; }
+        .btn-checkout { width: 100%; background: var(--brand-purple); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(92, 70, 228, 0.2); }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="nav-top">
-        <div class="logo">MYGRAM</div>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="বই খুঁজুন..." oninput="searchBooks()">
-            <button class="search-btn"><i class="fa fa-search"></i></button>
+    <header class="premium-header">
+        <!-- লোগো এখানে বসানো হয়েছে -->
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhNBY-u3oAGmiUweoU4TZkftWin7Fh5M3z4UWBE6D7n7cZYjDcoxn-s672Z5hRLCT6FAKRFpA6G4onC30UnzYhKzjDKL2V_Nif44dZ2VWWSt7KFE9JfTsY3o-yFu-Lc-2fgu7Sf0md23b6RbeCDvOVzqbudlFhxIdGiP1fv2vFO1GX1sRtkZsdd4sG8eh-X/s864/1307.png" alt="Logo" class="logo-img">
+        
+        <div class="header-right">
+            <input type="text" id="header-search-input" class="search-input" placeholder="Search..." onkeyup="handleRealTimeSearch(event)">
+            <div class="circle-btn" onclick="toggleSearchBox()">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div class="circle-btn" onclick="openCartDrawer()">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="badge-count" id="cart-badge-val">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- বাকি অংশ অপরিবর্তিত -->
+    <section class="hero-intro">
+        <h1 id="welcome-title">Premium KINO Store</h1>
+        <p>Explore elite handcrafted lifestyle collections.</p>
+    </section>
+
+    <div class="slider-section">
+        <div class="slider-box">
+            <div class="premium-slide active" style="background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&auto=format&fit=crop&q=80');"></div>
+            <div class="premium-slide" style="background-image: url('https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=600&auto=format&fit=crop&q=80');"></div>
         </div>
     </div>
-</header>
 
-<div id="homePage" class="page-content active">
-    <div class="slider-container">
-        <div class="slide">
-            <div class="slide-overlay">
-                <h2>বইয়ের দুনিয়ায় স্বাগতম</h2>
-                <p>সেরা সব কালেকশন এখন আপনার হাতে</p>
+    <div class="section-title">Explore Store</div>
+    <div class="horizontal-menu">
+        <div class="menu-chip active" id="default-chip" onclick="filterCategory('all', this)">All Products</div>
+        <div class="menu-chip" onclick="filterCategory('vase', this)">Home Decor (Vase)</div>
+        <div class="menu-chip" onclick="filterCategory('shirt', this)">Full Sleeve Shirt</div>
+        <div class="menu-chip" onclick="filterCategory('gadget', this)">Smart Gadgets</div>
+    </div>
+
+    <main class="products-container" id="homepage-products-grid"></main>
+
+    <div class="delivery-widget">
+        <div class="widget-flex">
+            <div class="delivery-avatar"><i class="fa-solid fa-truck-fast"></i></div>
+            <div>
+                <h4 style="font-size:14px;">Real-time tracking</h4>
+                <p style="font-size:11px; color:var(--text-slate);">Delivery Gay: Rabby Khan</p>
             </div>
         </div>
     </div>
 
-    <div class="cat-section">
-        <div class="cat-scroll">
-            <div class="cat-item" onclick="filterBooks('উপন্যাস')"><div class="cat-icon"><i class="fa fa-feather"></i></div><span>উপন্যাস</span></div>
-            <div class="cat-item" onclick="filterBooks('ইসলামিক')"><div class="cat-icon"><i class="fa fa-mosque"></i></div><span>ইসলামিক</span></div>
-            <div class="cat-item" onclick="filterBooks('গল্প')"><div class="cat-icon"><i class="fa fa-book"></i></div><span>গল্প</span></div>
-            <div class="cat-item" onclick="filterBooks('কবিতা')"><div class="cat-icon"><i class="fa fa-pen-nib"></i></div><span>কবিতা</span></div>
+    <nav class="bottom-premium-bar">
+        <div class="bar-link active" onclick="filterCategory('all', document.getElementById('default-chip'))"><i class="fa-solid fa-compass"></i><span>Discover</span></div>
+        <div class="bar-link" onclick="alert('🎁 Premium Offers: Buy 2 Get 1 Free on Shirts today!')"><i class="fa-solid fa-tags"></i><span>Offers</span></div>
+        <div class="bar-link" onclick="alert('🔐 Login feature is coming soon!')"><i class="fa-solid fa-user"></i><span>Profile</span></div>
+    </nav>
+
+    <div class="drawer-blur-mask" id="mask-overlay" onclick="closeAllDrawers()"></div>
+    
+    <div class="luxury-drawer" id="drawer-cart-panel">
+        <div class="drawer-top"><h3>Shopping Bag</h3><button onclick="closeAllDrawers()" style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button></div>
+        <div class="drawer-content">
+            <div class="cart-items-wrapper" id="cart-container-list"></div>
+            <div class="cart-checkout-footer" id="cart-footer-checkout-section" style="display: none;">
+                <div class="total-price-row"><span>Subtotal:</span><span id="cart-total-price-val">Tk 0</span></div>
+                <button class="btn-checkout" onclick="proceedToCheckout()"><i class="fa-solid fa-credit-card"></i> Proceed To Checkout</button>
+            </div>
         </div>
     </div>
 
-    <div class="book-grid" id="homeBookGrid"></div>
-</div>
+    <script>
+        const defaultProducts = {
+            vase: [{ title: "Handcrafted Ceramic Vase", price: "Tk 1,600.00", img: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=300&auto=format&fit=crop&q=80" }],
+            shirt: [{ title: "Full Sleeve Shirt | Bluven", price: "Tk 1,350.00", img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&auto=format&fit=crop&q=80" }],
+            gadget: [{ title: "Minimal Smart Watch Series 9", price: "Tk 3,400.00", img: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=300&auto=format&fit=crop&q=80" }]
+        };
 
-<nav class="bottom-nav">
-    <button class="nav-btn active" onclick="location.reload()"><i class="fa fa-home"></i>হোম</button>
-    <button class="nav-btn" onclick="location.href='checkout.html'"><i class="fa fa-shopping-cart"></i>কার্ট<span id="cart-badge">0</span></button>
-    <button class="nav-btn" onclick="toggleMenu()"><i class="fa fa-bars"></i>মেনু</button>
-</nav>
+        let myCartArray = [];
 
-<div class="drawer-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-<div class="drawer" id="menuDrawer">
-    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-        <h3>মেনু অপশন</h3>
-        <i class="fa fa-times" onclick="toggleMenu()" style="font-size:20px;"></i>
-    </div>
-    <a href="#" class="menu-link"><i class="fa fa-info-circle"></i> আমাদের সম্পর্কে</a>
-    <a href="#" class="menu-link"><i class="fa fa-phone"></i> যোগাযোগ</a>
-    <a href="#" class="menu-link"><i class="fa fa-shield-alt"></i> শর্তাবলী</a>
-</div>
-
-<script>
-    // ১. ডাটা লোডিং (অ্যাডমিন প্যানেল থেকে)
-    const adminBooks = JSON.parse(localStorage.getItem('myBooks')) || [];
-    const defaultBooks = [
-        { id: 101, title:"অপেক্ষা - হুমায়ূন আহমেদ", price:250, img:"https://via.placeholder.com/150", category:"উপন্যাস" },
-        { id: 102, title:"প্যারাডক্সিক্যাল সাজিদ", price:280, img:"https://via.placeholder.com/150", category:"ইসলামিক" }
-    ];
-
-    let allBooks = adminBooks.length > 0 ? adminBooks : defaultBooks;
-    let cart = JSON.parse(localStorage.getItem('myCart')) || [];
-
-    function displayBooks(books) {
-        const grid = document.getElementById('homeBookGrid');
-        grid.innerHTML = books.map(book => `
-            <div class="book-card">
-                <img src="${book.img}" alt="Book">
-                <h4>${book.title}</h4>
-                <span class="price">৳ ${book.price}</span>
-                <button class="add-btn" onclick="addToCart(${book.id})">কার্টে যোগ করুন</button>
-            </div>
-        `).join('');
-    }
-
-    function addToCart(id) {
-        const book = allBooks.find(b => b.id == id);
-        if(book) {
-            cart.push(book);
-            localStorage.setItem('myCart', JSON.stringify(cart));
-            updateBadge();
-            alert("বইটি কার্টে যোগ হয়েছে!");
+        function initImageSlider() {
+            const slides = document.querySelectorAll('.premium-slide');
+            if(slides.length === 0) return;
+            let currentSlide = 0;
+            setInterval(() => {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 2000);
         }
-    }
 
-    function updateBadge() {
-        const badge = document.getElementById('cart-badge');
-        badge.innerText = cart.length;
-        badge.style.display = cart.length > 0 ? 'block' : 'none';
-    }
+        function toggleSearchBox() {
+            const searchInput = document.getElementById('header-search-input');
+            searchInput.classList.toggle('active-search');
+            if(searchInput.classList.contains('active-search')) {
+                searchInput.focus();
+            } else {
+                searchInput.value = '';
+                filterCategory('all', document.getElementById('default-chip'));
+            }
+        }
 
-    function toggleMenu() {
-        const drawer = document.getElementById('menuDrawer');
-        const overlay = document.getElementById('menuOverlay');
-        drawer.classList.toggle('open');
-        overlay.style.display = drawer.classList.contains('open') ? 'block' : 'none';
-    }
+        function handleRealTimeSearch(event) {
+            const query = event.target.value.toLowerCase();
+            const grid = document.getElementById('homepage-products-grid');
+            grid.innerHTML = "";
 
-    function searchBooks() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allBooks.filter(b => b.title.toLowerCase().includes(query));
-        displayBooks(filtered);
-    }
+            const liveData = JSON.parse(localStorage.getItem('wordrobe_db')) || defaultProducts;
+            let productListToRender = [];
 
-    function filterBooks(cat) {
-        const filtered = allBooks.filter(b => b.category === cat);
-        displayBooks(filtered);
-    }
+            Object.keys(liveData).forEach(key => {
+                productListToRender = productListToRender.concat(liveData[key]);
+            });
 
-    window.onload = () => { displayBooks(allBooks); updateBadge(); };
-</script>
+            const filtered = productListToRender.filter(p => p.title.toLowerCase().includes(query));
+
+            filtered.forEach((p) => {
+                const card = document.createElement('div');
+                card.className = "product-luxury-card";
+                card.innerHTML = `
+                    <div class="img-holder" style="background-image: url('${p.img}');"></div>
+                    <div class="prod-info-title">${p.title}</div>
+                    <div class="prod-info-footer">
+                        <div class="prod-price">${p.price}</div>
+                        <button class="add-btn-purple" onclick="addToBag('${p.title.replace(/'/g, "\\'")}', '${p.price}', '${p.img}')"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            if(query !== '') {
+                document.querySelectorAll('.menu-chip').forEach(c => c.classList.remove('active'));
+            }
+        }
+
+        function openCartDrawer() {
+            document.getElementById('drawer-cart-panel').classList.add('active-open');
+            document.getElementById('mask-overlay').style.display = 'block';
+        }
+
+        function closeAllDrawers() {
+            document.getElementById('drawer-cart-panel').classList.remove('active-open');
+            document.getElementById('mask-overlay').style.display = 'none';
+        }
+
+        function filterCategory(catKey, element) {
+            document.querySelectorAll('.menu-chip').forEach(c => c.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            const grid = document.getElementById('homepage-products-grid');
+            if(!grid) return;
+            grid.innerHTML = "";
+
+            const liveData = JSON.parse(localStorage.getItem('wordrobe_db')) || defaultProducts;
+            let productListToRender = [];
+
+            if(catKey === 'all') {
+                Object.keys(liveData).forEach(key => {
+                    productListToRender = productListToRender.concat(liveData[key]);
+                });
+            } else {
+                productListToRender = liveData[catKey] || [];
+            }
+
+            productListToRender.forEach((p) => {
+                const card = document.createElement('div');
+                card.className = "product-luxury-card";
+                card.innerHTML = `
+                    <div class="img-holder" style="background-image: url('${p.img}');"></div>
+                    <div class="prod-info-title">${p.title}</div>
+                    <div class="prod-info-footer">
+                        <div class="prod-price">${p.price}</div>
+                        <button class="add-btn-purple" onclick="addToBag('${p.title.replace(/'/g, "\\'")}', '${p.price}', '${p.img}')"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addToBag(title, price, img) {
+            myCartArray.push({ title, price, img });
+            updateCartUI();
+            alert('🛍️ "' + title + '" সফলভাবে শপিং ব্যাগে যোগ হয়েছে!');
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-badge-val').innerText = myCartArray.length;
+            const cartList = document.getElementById('cart-container-list');
+            const footerSection = document.getElementById('cart-footer-checkout-section');
+            
+            if(myCartArray.length === 0) {
+                cartList.innerHTML = `<p style="text-align:center; color:var(--text-slate); margin-top:40px;">Your bag is empty</p>`;
+                footerSection.style.display = "none";
+                return;
+            }
+
+            cartList.innerHTML = "";
+            footerSection.style.display = "block";
+            let totalPriceSum = 0;
+
+            myCartArray.forEach((item, index) => {
+                let numericPrice = parseInt(item.price.replace(/[^0-9]/g, '')) || 0;
+                totalPriceSum += numericPrice;
+
+                const div = document.createElement('div');
+                div.className = "cart-item";
+                div.innerHTML = `
+                    <div class="cart-item-img" style="background-image:url('${item.img}')"></div>
+                    <div class="cart-item-info">
+                        <h5>${item.title}</h5>
+                        <p>${item.price}</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer;"><i class="fa-regular fa-trash-can"></i></button>
+                `;
+                cartList.appendChild(div);
+            });
+            document.getElementById('cart-total-price-val').innerText = "Tk " + totalPriceSum.toLocaleString();
+        }
+
+        function removeFromCart(index) {
+            myCartArray.splice(index, 1);
+            updateCartUI();
+        }
+
+        function proceedToCheckout() {
+            alert('🚀 Order Placed Successfully! Thank you for shopping with KINO.');
+            myCartArray = [];
+            updateCartUI();
+            closeAllDrawers();
+        }
+
+        window.onload = function() {
+            if (!localStorage.getItem('wordrobe_db')) {
+                localStorage.setItem('wordrobe_db', JSON.stringify(defaultProducts));
+            }
+
+            const adminAcc = JSON.parse(localStorage.getItem('wordrobe_admin_acc'));
+            if(adminAcc && adminAcc.name) {
+                document.getElementById('welcome-title').innerHTML = `Welcome to<br>${adminAcc.name}'s Store`;
+            }
+
+            initImageSlider();
+            filterCategory('all', document.getElementById('default-chip'));
+            updateCartUI();
+        };
+    </script>
 </body>
 </html>
