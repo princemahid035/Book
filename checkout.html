@@ -3,112 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>চেকআউট | MYGRAM BOOKS</title>
+    <title>Checkout | KINO</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        :root{ --p-blue:#1A374D; --orange:#FF6B35; --bg:#F4F7F9; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Hind Siliguri'; }
-        body{ background:var(--bg); padding-bottom: 100px; }
-        header { background:white; padding:15px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.05); position:sticky; top:0; }
-        .container { max-width: 500px; margin: 15px auto; padding: 0 15px; }
-        .card { background:white; padding:20px; border-radius:12px; margin-bottom:15px; box-shadow:0 2px 10px rgba(0,0,0,0.03); }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display:block; margin-bottom:5px; font-weight:600; font-size:14px; }
-        .input-group input, textarea { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; outline:none; }
-        .loc-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px; }
-        .loc-btn { padding:10px; border:1px solid #ddd; border-radius:8px; text-align:center; cursor:pointer; font-size:14px; }
-        .loc-btn.active { border-color:var(--p-blue); background:#eef2f5; font-weight:700; }
-        .summary-line { display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px; }
-        .bottom-bar { position:fixed; bottom:0; width:100%; background:white; padding:15px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 -5px 10px rgba(0,0,0,0.05); }
-        .confirm-btn { background:var(--p-blue); color:white; border:none; padding:12px 20px; border-radius:8px; font-weight:700; cursor:pointer; }
+        :root { --brand-color: #960000; }
+        
+        body { 
+            font-family: 'Hind Siliguri', sans-serif; 
+            background: #ffffff; /* ব্যাকগ্রাউন্ড সাদা */
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh;
+        }
+
+        .checkout-wrapper { width: 100%; max-width: 450px; padding: 20px; box-sizing: border-box; }
+        
+        .top-bar { display: flex; align-items: center; padding: 10px 0 30px; }
+        .back-circle { 
+            width: 40px; height: 40px; background: #f8f8f8; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer; 
+        }
+
+        .order-card { 
+            background: #ffffff; 
+            border-radius: 24px; 
+            padding: 20px; 
+            margin-bottom: 25px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06); 
+            border: 1px solid #f0f0f0;
+        }
+
+        .product-box { display: flex; align-items: center; gap: 15px; }
+        .product-box img { width: 90px; height: 90px; border-radius: 16px; object-fit: cover; background: #f9f9f9; }
+        
+        .price-text { color: var(--brand-color); font-size: 22px; font-weight: 800; }
+        
+        .btn-stack { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .action-btn { 
+            display: flex; align-items: center; padding: 16px 20px; border-radius: 18px; 
+            text-decoration: none; color: white; font-size: 16px; font-weight: 600; 
+        }
+        .btn-wa { background: #25D366; }
+        .btn-ms { background: #0084FF; }
+        .btn-call { background: var(--brand-color); }
     </style>
 </head>
 <body>
 
-<header>
-    <a href="index.html" style="position:absolute; left:15px; color:var(--p-blue); text-decoration:none;"><i class="fa fa-arrow-left"></i></a>
-    <b>চেকআউট</b>
-</header>
-
-<div class="container">
-    <div class="card">
-        <h3>শিপিং তথ্য</h3><br>
-        <div class="loc-grid">
-            <div class="loc-btn active" id="loc-dhaka" onclick="setCharge(90, 'dhaka')">ঢাকার ভিতরে (৳৯০)</div>
-            <div class="loc-btn" id="loc-outside" onclick="setCharge(150, 'outside')">ঢাকার বাইরে (৳১৫০)</div>
+<div class="checkout-wrapper">
+    <div class="top-bar">
+        <div class="back-circle" onclick="history.back()">
+            <i class="fa fa-arrow-left"></i>
         </div>
-        <div class="input-group">
-            <label>আপনার নাম</label>
-            <input type="text" id="name" placeholder="নাম লিখুন">
-        </div>
-        <div class="input-group">
-            <label>মোবাইল নম্বর</label>
-            <input type="tel" id="phone" placeholder="01XXXXXXXXX">
-        </div>
-        <div class="input-group">
-            <label>পূর্ণ ঠিকানা</label>
-            <textarea id="address" rows="3" placeholder="বাসা নং, রাস্তা, এলাকা..."></textarea>
-        </div>
+        <div style="flex:1; text-align:center; font-weight:700; font-size:18px; margin-right:40px;">চেকআউট</div>
     </div>
 
-    <div class="card">
-        <h3>অর্ডারের বিবরণ</h3><br>
-        <div id="itemList"></div>
-        <hr style="margin:10px 0; border:0; border-top:1px dashed #ddd;">
-        <div class="summary-line"><span>মোট বইয়ের দাম:</span> <span id="subtotal">৳ ০</span></div>
-        <div class="summary-line"><span>ডেলিভারি চার্জ:</span> <span id="del-charge">৳ ৯০</span></div>
-        <div class="summary-line" style="font-weight:700; font-size:18px; color:var(--orange)"><span>সর্বমোট:</span> <span id="grand-total">৳ ০</span></div>
+    <div class="order-card" id="briefContent">
+        <p style="text-align:center;">তথ্য লোড হচ্ছে...</p>
     </div>
-</div>
 
-<div class="bottom-bar">
-    <div><small>মোট পরিশোধ:</small><br><b id="sticky-total" style="color:var(--orange)">৳ ০</b></div>
-    <button class="confirm-btn" onclick="placeOrder()">অর্ডার নিশ্চিত করুন</button>
+    <div class="btn-stack">
+        <a href="#" id="waLink" class="action-btn btn-wa" target="_blank">
+            <i class="fab fa-whatsapp" style="font-size:20px; margin-right:10px;"></i> হোয়াটসঅ্যাপে অর্ডার করুন
+        </a>
+        <a href="#" id="msLink" class="action-btn btn-ms" target="_blank">
+            <i class="fab fa-facebook-messenger" style="font-size:20px; margin-right:10px;"></i> মেসেঞ্জারে অর্ডার করুন
+        </a>
+        <a href="tel:+8801700000000" class="action-btn btn-call">
+            <i class="fa-solid fa-phone-volume" style="font-size:20px; margin-right:10px;"></i> সরাসরি কল করুন
+        </a>
+    </div>
 </div>
 
 <script>
-    let cart = JSON.parse(localStorage.getItem('myCart')) || [];
-    let deliveryCharge = 90;
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        const pName = params.get('name');
+        const db = JSON.parse(localStorage.getItem('wordrobe_db')) || {};
+        let foundProduct = null;
 
-    function setCharge(amt, type) {
-        deliveryCharge = amt;
-        document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('loc-'+type).classList.add('active');
-        calculate();
+        Object.keys(db).forEach(key => {
+            const item = db[key].find(p => p.title === pName);
+            if (item) foundProduct = item;
+        });
+
+        if(foundProduct) {
+            let priceNumeric = parseInt(foundProduct.price.replace(/[^\d]/g, ''));
+            let deliveryCharge = 150;
+            let total = priceNumeric + deliveryCharge;
+
+            document.getElementById('briefContent').innerHTML = `
+                <div class="product-box">
+                    <img src="${foundProduct.img}" alt="product">
+                    <div>
+                        <div style="font-size:15px; color:#666;">আপনার নির্বাচন:</div>
+                        <div style="font-size:16px; font-weight:600; margin:5px 0;">${foundProduct.title}</div>
+                        <div class="price-text">৳ ${priceNumeric}</div>
+                        <div style="font-size:13px; color:#888; margin-top:5px;">ডেলিভারি চার্জ: ৳ ${deliveryCharge}</div>
+                        <div style="font-size:17px; font-weight:700; color:var(--brand-color); margin-top:5px;">মোট: ৳ ${total}</div>
+                    </div>
+                </div>
+            `;
+
+            const myNum = "8801700000000";
+            const text = `আসসালামু আলাইকুম, আমি KINO থেকে এই পণ্যটি কিনতে চাই:\n\nপণ্য: ${foundProduct.title}\nমূল্য: ৳${priceNumeric}\nডেলিভারি চার্জ: ৳${deliveryCharge}\nমোট দাম: ৳${total} টাকা`;
+            
+            document.getElementById('waLink').href = `https://wa.me/${myNum}?text=${encodeURIComponent(text)}`;
+            document.getElementById('msLink').href = `https://m.me/YOUR_PAGE_USERNAME`; 
+        } else {
+            document.getElementById('briefContent').innerHTML = "<p style='text-align:center;'>পণ্যটি পাওয়া যায়নি!</p>";
+        }
     }
-
-    function calculate() {
-        let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-        document.getElementById('itemList').innerHTML = cart.map(item => `<div class="summary-line"><span>${item.title}</span><span>৳${item.price}</span></div>`).join('');
-        
-        document.getElementById('subtotal').innerText = `৳ ${subtotal}`;
-        document.getElementById('del-charge').innerText = `৳ ${deliveryCharge}`;
-        document.getElementById('grand-total').innerText = `৳ ${subtotal + deliveryCharge}`;
-        document.getElementById('sticky-total').innerText = `৳ ${subtotal + deliveryCharge}`;
-    }
-
-    function placeOrder() {
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-
-        if(!name || !phone || !address) { alert("সব তথ্য পূরণ করুন!"); return; }
-        if(cart.length === 0) { alert("কার্ট খালি!"); return; }
-
-        let msg = `*নতুন অর্ডার - MYGRAM*\n----------\n`;
-        msg += `*নাম:* ${name}\n*ফোন:* ${phone}\n*ঠিকানা:* ${address}\n`;
-        msg += `*এলাকা:* ${deliveryCharge === 90 ? 'ঢাকার ভিতরে' : 'ঢাকার বাইরে'}\n----------\n`;
-        msg += `*বইসমূহ:*\n` + cart.map((b,i) => `${i+1}. ${b.title}`).join('\n');
-        msg += `\n----------\n*সর্বমোট:* ${document.getElementById('grand-total').innerText}`;
-
-        let whatsappLink = `https://wa.me/8801744264129?text=${encodeURIComponent(msg)}`; // আপনার নম্বর দিন
-        
-        localStorage.removeItem('myCart');
-        window.location.href = whatsappLink;
-    }
-
-    window.onload = calculate;
 </script>
 </body>
 </html>
