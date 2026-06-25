@@ -12,7 +12,7 @@
         
         body { 
             font-family: 'Hind Siliguri', sans-serif; 
-            background: #ffffff; /* ব্যাকগ্রাউন্ড সাদা */
+            background: #ffffff; 
             margin: 0; 
             display: flex; 
             justify-content: center; 
@@ -82,19 +82,25 @@
     window.onload = function() {
         const params = new URLSearchParams(window.location.search);
         const pName = params.get('name');
+        
+        // LocalStorage থেকে ডাটা নেওয়া
         const db = JSON.parse(localStorage.getItem('wordrobe_db')) || {};
         let foundProduct = null;
 
+        // প্রোডাক্টটি খোঁজা হচ্ছে
         Object.keys(db).forEach(key => {
             const item = db[key].find(p => p.title === pName);
             if (item) foundProduct = item;
         });
 
         if(foundProduct) {
-            let priceNumeric = parseInt(foundProduct.price.replace(/[^\d]/g, ''));
+            // দাম বের করা (যদি স্ট্রিং এ টাকা থাকে, তবে সেটা সরাবে)
+            let priceRaw = foundProduct.price.toString();
+            let priceNumeric = parseInt(priceRaw.replace(/[^0-9]/g, '')) || 0;
             let deliveryCharge = 150;
             let total = priceNumeric + deliveryCharge;
 
+            // HTML আপডেট
             document.getElementById('briefContent').innerHTML = `
                 <div class="product-box">
                     <img src="${foundProduct.img}" alt="product">
@@ -108,6 +114,7 @@
                 </div>
             `;
 
+            // হোয়াটসঅ্যাপ টেক্সট তৈরি
             const myNum = "8801700000000";
             const text = `আসসালামু আলাইকুম, আমি KINO থেকে এই পণ্যটি কিনতে চাই:\n\nপণ্য: ${foundProduct.title}\nমূল্য: ৳${priceNumeric}\nডেলিভারি চার্জ: ৳${deliveryCharge}\nমোট দাম: ৳${total} টাকা`;
             
