@@ -311,7 +311,27 @@
         }
 
         function removeFromCart(index) { myCartArray.splice(index, 1); updateCartUI(); }
-        function proceedToCheckout() { alert('🚀 Order Placed Successfully! Thank you for shopping with KINO.'); myCartArray = []; updateCartUI(); closeAllDrawers(); }
+
+        // আপডেট করা চেকআউট ফাংশন (ডাটা সেভ এবং রিডাইরেক্ট)
+        function proceedToCheckout() {
+            if (myCartArray.length === 0) {
+                alert('🛒 আপনার শপিং ব্যাগটি খালি! দয়া করে প্রোডাক্ট যোগ করুন।');
+                return;
+            }
+            
+            // ১. কার্টের সব প্রোডাক্ট localStorage-এ সেভ করা হচ্ছে
+            localStorage.setItem('checkout_cart', JSON.stringify(myCartArray));
+            
+            // ২. মোট প্রাইস হিসাব করে আলাদাভাবে সেভ করা হচ্ছে
+            let totalPriceSum = 0;
+            myCartArray.forEach(item => {
+                totalPriceSum += parseFloat(item.price.replace(/[^0-9.]/g, '')) || 0;
+            });
+            localStorage.setItem('checkout_total', totalPriceSum.toFixed(2));
+
+            // ৩. সরাসরি আপনার চেকআউট পেজে রিডাইরেক্ট করা হচ্ছে
+            window.location.href = 'checkout.html'; 
+        }
 
         window.onload = function() {
             if (!localStorage.getItem('wordrobe_db')) { localStorage.setItem('wordrobe_db', JSON.stringify(defaultProducts)); }
