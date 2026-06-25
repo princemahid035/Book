@@ -25,7 +25,7 @@
 <div class="nav-bar">
     <i class="fa-solid fa-arrow-left" onclick="history.back()"></i> 
     <b style="font-size:16px;">Product Details</b>
-    <i class="fa-solid fa-bag-shopping"></i>
+    <i class="fa-solid fa-bag-shopping" onclick="location.href='cart.html'"></i>
 </div>
 
 <div id="product-details-content">
@@ -46,7 +46,7 @@
 
 <div class="footer-btns">
     <button class="btn btn-cart" id="add-to-cart-btn">Add to Cart</button>
-    <button class="btn btn-buy" onclick="location.href='checkout.html'">Checkout Now</button>
+    <button class="btn btn-buy" id="buy-now-btn">Checkout Now</button>
 </div>
 
 <script>
@@ -83,10 +83,13 @@
                 let cart = JSON.parse(localStorage.getItem('cart')) || [];
                 cart.push(foundProduct);
                 localStorage.setItem('cart', JSON.stringify(cart));
-                
-                // হোম পেজে সিগন্যাল পাঠানোর জন্য
                 window.dispatchEvent(new Event('cartUpdated'));
                 alert('🛍️ "' + foundProduct.title + '" added to your bag!');
+            };
+
+            // Checkout বাটন লজিক (নামসহ চেকআউটে পাঠানো)
+            document.getElementById('buy-now-btn').onclick = function() {
+                location.href = 'checkout.html?name=' + encodeURIComponent(foundProduct.title);
             };
 
             // সাজেশন সেকশন
