@@ -36,10 +36,10 @@
             border: 1px solid #f0f0f0;
         }
 
-        .product-box { display: flex; align-items: center; gap: 15px; }
-        .product-box img { width: 90px; height: 90px; border-radius: 16px; object-fit: cover; background: #f9f9f9; }
+        .product-box { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .product-box img { width: 80px; height: 80px; border-radius: 16px; object-fit: cover; background: #f9f9f9; }
         
-        .price-text { color: var(--brand-color); font-size: 22px; font-weight: 800; }
+        .price-text { color: var(--brand-color); font-size: 18px; font-weight: 800; }
         
         .btn-stack { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
         .action-btn { 
@@ -80,49 +80,56 @@
 
 <script>
     window.onload = function() {
-        const params = new URLSearchParams(window.location.search);
-        const pName = params.get('name');
+        // LocalStorage থেকে কার্ট ডাটা নেওয়া
+        const myCartArray = JSON.parse(localStorage.getItem('cart')) || [];
+        const briefContent = document.getElementById('briefContent');
         
-        // LocalStorage থেকে ডাটা নেওয়া
-        const db = JSON.parse(localStorage.getItem('wordrobe_db')) || {};
-        let foundProduct = null;
+        if (myCartArray.length === 0) {
+            briefContent.innerHTML = "<p style='text-align:center;'>আপনার ব্যাগে কোনো পণ্য নেই!</p>";
+            return;
+        }
 
-        // প্রোডাক্টটি খোঁজা হচ্ছে
-        Object.keys(db).forEach(key => {
-            const item = db[key].find(p => p.title === pName);
-            if (item) foundProduct = item;
-        });
+        let productsHTML = "";
+        let grandTotal = 0;
+        let deliveryCharge = 150; 
+        let orderDetailsText = "আসসালামু আলাইকুম, আমি KINO থেকে নিচের পণ্যগুলো অর্ডার করতে চাই:\n\n";
 
-        if(foundProduct) {
-            // দাম বের করা (যদি স্ট্রিং এ টাকা থাকে, তবে সেটা সরাবে)
-            let priceRaw = foundProduct.price.toString();
-            let priceNumeric = parseInt(priceRaw.replace(/[^0-9]/g, '')) || 0;
-            let deliveryCharge = 150;
-            let total = priceNumeric + deliveryCharge;
-
-            // HTML আপডেট
-            document.getElementById('briefContent').innerHTML = `
+        // প্রতিটি পণ্য লুপ করে দেখানো
+        myCartArray.forEach((item, index) => {
+            let priceNumeric = parseInt(item.price.replace(/[^0-9]/g, '')) || 0;
+            grandTotal += priceNumeric;
+            
+            productsHTML += `
                 <div class="product-box">
-                    <img src="${foundProduct.img}" alt="product">
+                    <img src="${item.img}" alt="product">
                     <div>
-                        <div style="font-size:15px; color:#666;">আপনার নির্বাচন:</div>
-                        <div style="font-size:16px; font-weight:600; margin:5px 0;">${foundProduct.title}</div>
+                        <div style="font-size:15px; font-weight:600;">${item.title}</div>
                         <div class="price-text">৳ ${priceNumeric}</div>
-                        <div style="font-size:13px; color:#888; margin-top:5px;">ডেলিভারি চার্জ: ৳ ${deliveryCharge}</div>
-                        <div style="font-size:17px; font-weight:700; color:var(--brand-color); margin-top:5px;">মোট: ৳ ${total}</div>
                     </div>
                 </div>
             `;
+            orderDetailsText += `${index + 1}. ${item.title} - ৳${priceNumeric}\n`;
+        });
 
-            // হোয়াটসঅ্যাপ টেক্সট তৈরি
-            const myNum = "8801700000000";
-            const text = `আসসালামু আলাইকুম, আমি KINO থেকে এই পণ্যটি কিনতে চাই:\n\nপণ্য: ${foundProduct.title}\nমূল্য: ৳${priceNumeric}\nডেলিভারি চার্জ: ৳${deliveryCharge}\nমোট দাম: ৳${total} টাকা`;
-            
-            document.getElementById('waLink').href = `https://wa.me/${myNum}?text=${encodeURIComponent(text)}`;
-            document.getElementById('msLink').href = `https://m.me/YOUR_PAGE_USERNAME`; 
-        } else {
-            document.getElementById('briefContent').innerHTML = "<p style='text-align:center;'>পণ্যটি পাওয়া যায়নি!</p>";
-        }
+        let finalTotal = grandTotal + deliveryCharge;
+        orderDetailsText += `\nডেলিভারি চার্জ: ৳${deliveryCharge}\nমোট দাম: ৳${finalTotal} টাকা`;
+
+        // HTML এ সব ডাটা ইনজেক্ট করা
+        briefContent.innerHTML = `
+            ${productsHTML}
+            <div style="border-top:2px solid #f0f0f0; margin-top:20px; padding-top:15px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>সাব-টোটাল:</span> <span>৳ ${grandTotal}</span></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>ডেলিভারি চার্জ:</span> <span>৳ ${deliveryCharge}</span></div>
+                <div style="display:flex; justify-content:space-between; font-weight:800; font-size:18px; color:var(--brand-color); margin-top:10px;">
+                    <span>মোট:</span> <span>৳ ${finalTotal}</span>
+                </div>
+            </div>
+        `;
+
+        // লিঙ্ক আপডেট করা
+        const myNum = "8801700000000";
+        document.getElementById('waLink').href = `https://wa.me/${myNum}?text=${encodeURIComponent(orderDetailsText)}`;
+        document.getElementById('msLink').href = `https://m.me/YOUR_PAGE_USERNAME`; 
     }
 </script>
 </body>
